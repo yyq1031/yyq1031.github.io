@@ -64,7 +64,7 @@ const INFO = {
 				"Implemented deep learning architectures including a two-layer feedforward network, a character-level RNN for sequence-based language identification, and a CNN leveraging transfer learning with pre-trained convolutional layers, achieving high accuracy on MNIST and text datasets.",
 			logo: "labels.png",
 			linkText: "View Project",
-			link: "https://github.com/yyq1031",
+			link: "https://github.com/yyq1031/CS188/tree/main/machinelearning",
 		},
 
 		{
@@ -75,7 +75,7 @@ const INFO = {
 				"Implemented probabilistic inference for Pacman Ghostbusters using Bayes Nets, variable elimination, exact inference, and particle filtering to track and hunt invisible ghosts in dynamic environments.",
 			logo: "ghostbusters.png",
 			linkText: "View Project",
-			link: "https://github.com/yyq1031",
+			link: "https://github.com/yyq1031/CS188/tree/main/tracking",
 		},
 
 		{
@@ -86,7 +86,7 @@ const INFO = {
 				"Implemented reinforcement learning agents (Value Iteration, Q-Learning, Approximate Q-Learning) to train Pacman and simulated robots in Gridworld using MDPs, exploration strategies, and feature-based function approximation.",
 			logo: "rl.png",
 			linkText: "View Project",
-			link: "https://github.com/yyq1031",
+			link: "https://github.com/yyq1031/CS188/tree/main/reinforcement",
 		},
 
 		{
@@ -97,7 +97,7 @@ const INFO = {
 				"Implemented search algorithms (DFS, BFS, UCS, A*) and heuristics in Python to navigate Pacman mazes with ghosts, optimizing pathfinding and food-collection strategies.",
 			logo: "pacman.png",
 			linkText: "View Project",
-			link: "https://github.com/yyq1031",
+			link: "https://github.com/yyq1031/CS188",
 		},
 
 		{
@@ -108,7 +108,7 @@ const INFO = {
 				"Developed a logistic regression model with feature engineering and cross-validation to classify spam vs. ham emails, achieving 85% test accuracy.",
 			logo: "spam.png",
 			linkText: "View Project",
-			link: "https://github.com/yyq1031",
+			link: "https://github.com/yyq1031/Data100/tree/main/spam%26ham",
 		},
 
 		{
@@ -119,7 +119,7 @@ const INFO = {
 				"Built a scikit-learn model on Cook County property data to predict housing prices using LASSO and Ridge regression.",
 			logo: "cookcounty.png",
 			linkText: "View Project",
-			link: "https://github.com/yyq1031",
+			link: "https://github.com/yyq1031/Data100/tree/main/housing",
 		},
 
 		{
@@ -130,7 +130,7 @@ const INFO = {
 				"Built a Snake game in C by implementing memory management, game logic, snake movement, and board updates with debugging and integration testing.",
 			logo: "snek.png",
 			linkText: "View Project",
-			link: "https://github.com/yyq1031",
+			link: "https://github.com/61c-student/fa24-proj1-yyq1031",
 		},
 
 		{
@@ -174,7 +174,7 @@ const INFO = {
 				"Implemented a Python-based Scheme interpreter, supporting special forms, procedures, macros, streams, and a variant of R5RS.",
 			logo: "scheme.png",
 			linkText: "View Project",
-			link: "https://github.com/yyq1031",
+			link: "https://github.com/yyq1031/CS61A/tree/main/projects/scheme",
 		},
 
 		{
@@ -185,7 +185,7 @@ const INFO = {
 				"Developed a Hog game simulator in Python, implementing dice mechanics, special rules, higher-order functions, probabilistic strategies, and control flow through strategy optimization.",
 			logo: "hog.png",
 			linkText: "View Project",
-			link: "https://github.com/yyq1031",
+			link: "https://github.com/yyq1031/CS61A/tree/main/projects/hog",
 		},
 
 	],
