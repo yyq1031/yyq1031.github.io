@@ -8,12 +8,12 @@ import Projects from "./pages/projects";
 import Research from "./pages/research";
 import ReadArticle from "./pages/readArticle";
 import Contact from "./pages/contact";
-import CS180 from "./pages/cs180/cs180";
+import CS180 from "./pages/cs180";
 import Notfound from "./pages/404";
 
 import { TRACKING_ID } from "./data/tracking";
 import "./app.css";
-import CS180Proj0 from "./pages/cs180/project0";
+import CS180Proj0 from "./pages/cs180project0";
 
 function App() {
 	useEffect(() => {
