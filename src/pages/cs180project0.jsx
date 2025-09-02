@@ -12,6 +12,9 @@ const CS180Proj0 = () => {
                     <img src="/zoomedin.png" alt="Zoomed in, far away" />
                     <p>Zoomed in, far away</p>
                 </div>
+                {/* <div>
+                    <p>Placing camera very close to the face with no zoom makes the facial features closer to camera appear much larger and features further away appear smaller as phone camera exaggerates the depth of different facial features.</p>
+                </div> */}
             </div>
             <h2>Part 2: Architectural Perspective Compression</h2>
             <div className="photo-row">
