@@ -57,6 +57,17 @@ const INFO = {
 		},
 
 		{
+			title: "Computer Vision Projects",
+			type: "course",
+			highlight: "false",
+			description:
+				"",
+			logo: "streetzoomedin.png",
+			linkText: "View Project",
+			link: "/cs180",
+		},
+
+		{
 			title: "Handwritten Digit Classification and Language Identification",
 			type: "course",
 			highlight: "true",

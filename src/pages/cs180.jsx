@@ -1,8 +1,10 @@
+import { Link } from "react-router-dom";
+
 const CS180 = () => {
     return(
         <div>
             <h1>Welcome to my CS180 Project Gallery!</h1>
-            <p><a href="./cs180/project0">Project 0</a></p>
+            <p><Link to="/cs180/project0">Project 0</Link></p>
         </div>
     )
 }
