@@ -19,11 +19,11 @@ const CS180Proj0 = () => {
             <h2>Part 2: Architectural Perspective Compression</h2>
             <div className="photo-row">
                 <div className="photo">
-                    <img src="/buildingnozoom.png" alt="No zoom, close up" />
+                    <img src="/buildingnozoom.jpg" alt="No zoom, close up" />
                     <p>No zoom, close up</p>
                 </div>
                 <div className="photo">
-                    <img src="/buildingzoomedin.png" alt="Zoomed in, far away" />
+                    <img src="/buildingzoomedin.jpg" alt="Zoomed in, far away" />
                     <p>Zoomed in, far away</p>
                 </div>
             </div>
