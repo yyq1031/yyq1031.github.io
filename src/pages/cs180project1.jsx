@@ -256,18 +256,21 @@ const CS180Proj1 = () => {
 
                 <p><b>Horizontal changes:</b></p>
                 <MathJax>
-                  {"\\( G_x = \\begin{bmatrix} -1 & 0 & +1 \\\\ -2 & 0 & +2 \\\\ -1 & 0 & +1 \\end{bmatrix} * I \\)"}
+                  {"\\( G_x = \\begin{bmatrix} -1 & 0 & 1 \\\\ -2 & 0 & 2 \\\\ -1 & 0 & 1 \\end{bmatrix} * I \\)"}
                 </MathJax>
 
                 <p><b>Vertical changes:</b></p>
                 <MathJax>
-                  {"\\( G_y = \\begin{bmatrix} -1 & -2 & -1 \\\\ 0 & 0 & 0 \\\\ +1 & +2 & +1 \\end{bmatrix} * I \\)"}
+                  {"\\( G_y = \\begin{bmatrix} -1 & -2 & -1 \\\\ 0 & 0 & 0 \\\\ 1 & 2 & 1 \\end{bmatrix} * I \\)"}
                 </MathJax>
 
                 <p><b>Gradient magnitude:</b></p>
                 <MathJax>
                   {"\\( G = \\sqrt{ G_x^2 + G_y^2 } \\)"}
                 </MathJax>
+                <p>
+                After applying Sobel derivatives, which approximate the gradient of intensity with horizontal filter G<sub>x</sub> and vertical filter G<sub>y</sub>, the gradient magnitude <code>G = sqrt(G<sub>x</sub>² + G<sub>y</sub>²)</code> highlights the edges of the images. NCC is then performed on these edge maps to find the best alignment.
+                </p>
               </div>
             </MathJaxContext>
           </div>
