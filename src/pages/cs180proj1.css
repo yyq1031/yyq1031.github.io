@@ -1,0 +1,163 @@
+html { scroll-behavior: smooth; }
+
+.cs180 {
+  position: relative;
+  color: var(--text);
+  background: linear-gradient(180deg, var(--bg), #0a0c10);
+  min-height: 100vh;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  line-height: 1.6;
+}
+
+/* --- top progress bar --- */
+.progress-wrap{
+  position: fixed; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.04));
+  z-index: 9999;
+}
+.progress-bar{
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), #86efac);
+  box-shadow: 0 0 12px var(--ring);
+  transition: width .12s ease-out;
+}
+
+/* --- sticky TOC sidebar --- */
+.toc{
+  position: fixed;
+  top: 60px;
+  left: max(12px, calc((100vw - 1200px)/2 - 220px));
+  width: 200px;
+  max-height: calc(100vh - 80px);
+  overflow: auto;
+  padding: 14px 12px;
+  background: var(--panel-2);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+  display: none; /* hidden on small screens */
+}
+@media (min-width: 1100px){
+  .toc{ display:block; }
+}
+.toc-title{
+  font-weight: 700; font-size: 13px; letter-spacing: .4px;
+  color: var(--muted); margin-bottom: 10px; text-transform: uppercase;
+}
+.toc ul{ list-style: none; padding: 0; margin: 0; }
+.toc li{ margin: 6px 0; }
+.toc a{
+  display: block; padding: 6px 10px; border-radius: 8px;
+  text-decoration: none; color: var(--text); font-size: 14px;
+  border: 1px solid transparent;
+}
+.toc a:hover{ background: rgba(255,255,255,.04); }
+.toc a.active{
+  background: color-mix(in oklab, var(--primary) 18%, transparent);
+  border-color: color-mix(in oklab, var(--primary) 32%, transparent);
+}
+
+/* --- page header --- */
+.page-header{
+  padding: 64px 0 8px;
+}
+.page-header h1{
+  font-size: clamp(28px, 3.2vw, 44px);
+  margin: 0 0 6px;
+}
+.page-header h2{
+  font-size: clamp(16px, 2vw, 20px);
+  color: var(--muted);
+  margin: 0;
+}
+
+/* --- main container --- */
+.hero{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* --- blocks/sections --- */
+.block{
+  background: var(--panel-2);
+  padding: 22px 24px 28px;
+  margin: 18px 0 28px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(255,255,255,.06);
+}
+.section h2{
+  margin: 0 0 10px;
+  letter-spacing: .3px;
+  text-align: left;
+}
+.subsection{
+  margin: 24px 0 28px;
+  padding: 22px 22px 24px;
+  border: 1px dashed rgba(255,255,255,.08);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,.02), transparent);
+}
+.subsection h3{
+  margin: 0 0 8px;
+  position: relative; 
+}
+.subsection h3::before{
+  content:""; position:absolute; left:0; top:4px; bottom:4px; width:4px;
+  border-radius:4px; background: linear-gradient(180deg, var(--primary), transparent);
+}
+
+/* --- overview pill --- */
+.overview-text p{
+  background: var(--panel);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin: 16px 0 0;
+  border: 1px solid rgba(255,255,255,.06);
+}
+
+/* --- image grids reuse your styles with small refinements --- */
+.photo-row{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+  margin-top: 14px;
+}
+.card{
+  background: var(--panel);
+  border-radius: calc(var(--radius) - 4px);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,.06);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 28px rgba(0,0,0,.35);
+  border-color: var(--ring);
+}
+.thumb{ aspect-ratio: 4 / 3; display:grid; place-items:center; background:#0f1318; }
+.thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+.meta{ padding: 12px 14px 16px; }
+.filename{ margin: 0 0 8px; font-weight: 600; letter-spacing: .2px; }
+.chips{ display:flex; flex-wrap:wrap; gap:8px; }
+.chip{
+  display:inline-flex; align-items:center; gap:6px; font-size:13px;
+  padding:6px 10px; border-radius:999px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+}
+.chip--green{
+  background: color-mix(in oklab, var(--green) 18%, transparent);
+  border-color: color-mix(in oklab, var(--green) 30%, transparent);
+}
+.chip--red{
+  background: color-mix(in oklab, var(--red) 18%, transparent);
+  border-color: color-mix(in oklab, var(--red) 30%, transparent);
+}
+
+/* math spacing */
+.math{ margin: 16px 0 24px; }
+
+

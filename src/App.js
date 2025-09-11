@@ -14,6 +14,7 @@ import Notfound from "./pages/404";
 import { TRACKING_ID } from "./data/tracking";
 import "./app.css";
 import CS180Proj0 from "./pages/cs180project0";
+import CS180Proj1 from "./pages/cs180project1";
 
 function App() {
 	useEffect(() => {
@@ -33,6 +34,7 @@ function App() {
 				<Route path="/contact" element={<Contact />} />
 				<Route path="/cs180" element={<CS180 />} />
 				<Route path="/cs180/project0" element={<CS180Proj0 />} />
+				<Route path="/cs180/project1" element={<CS180Proj1 />} />
 				<Route path="*" element={<Notfound />} />
 			</Routes>
 		</div>
