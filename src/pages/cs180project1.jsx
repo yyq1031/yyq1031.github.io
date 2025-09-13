@@ -215,7 +215,7 @@ const CS180Proj1 = () => {
                 <p>
                 NCC is a better metric as it measures how two images correlate to each other in terms of pixel intensities. NCC rescales intensities in order to compare the pattern of variation across the two images rather than absolute brightness between them. NCC also focuses on these shared structures and patterns across images, ignoring global brightness and contrast differences that might be present due to the technology at the time when these glass plates are created.
                 </p>
-                <p>The following images are aligned using NCC only (excluding emir.tif (NCC) which is shown in the next section):</p>
+                
               </div>
             </MathJaxContext>
 
@@ -232,6 +232,7 @@ const CS180Proj1 = () => {
               <li>Search window (fine levels): {params["no sobel"].search_window} pixels</li>
               <li>Search window (coarse level): {params["no sobel"].search_window_coarse} pixels</li>
             </ul>
+            <p>These images are aligned using NCC only (with emir.tif (NCC) shown under Problems Encountered):</p>
             <ImageGrid list={tiffsNoEmir} />
           </div>
 
