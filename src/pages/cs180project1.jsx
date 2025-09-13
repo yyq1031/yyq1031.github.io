@@ -39,7 +39,7 @@ const CS180Proj1 = () => {
   const jpgs = images.filter(({ file }) => /\.jpg$/i.test(file));
   const numberedTifs = images.filter(({ file }) => /^[1-6]\.tif$/i.test(file));
   const tifs = images.filter(({ file }) => /\.tif$/i.test(file) && !/^[1-6]\.tif$/i.test(file));
-
+  const tiffsNoEmir = images.filter(({ file }) => /\.tif(f)?$/i.test(file) && file.toLowerCase() !== "emir.tif");
   const emirComparisons = [
     { src: "/cs180proj1/out/emir_aligned_without_sobel.jpg", label: "emir_aligned.jpg (NCC)",
       offsets: { green: { dx: 24, dy: 49 }, red: { dx: -249, dy: 95 } }, },
@@ -186,15 +186,15 @@ const CS180Proj1 = () => {
 
           <div id="preprocess" className="subsection">
             <h3>Image Preprocess</h3>
-            <p>The approach for this project is to align green and red channels to the blue channel (base channel) to form the final colorized image. Each image is read as floating point numbers and separated into the blue, green, and red channels by slicing evenly into three color channels. However, some borders of the three color channels can be noisy and interfere with the alignment. To reduce the effect of noisy borders, the outer 10% of each channel is cropped before applying any alignment algorithm.</p>
+            <p>The approach for this project is to align green and red channels to the blue channel (base channel) to form the final colorized image. Each image is read as floating point numbers to scale pixels to the [0, 1] range, avoiding integer rounding and overflow during arithmetic operations in the later steps. Each image is then separated into blue, green, and red channels by slicing the image height evenly into the three color channels. However, some borders of the three color channels can be noisy and interfere with the alignment. To reduce the effect of noisy borders, the outer 10% of each channel is cropped before applying any alignment algorithm, returning the centered interior regions only.</p>
           </div>
 
           <div id="simple" className="subsection">
-            <h3>Simple Alignment with Exhaustive Serach</h3>
-            <p>To test the correctness of the alignment algorithm, the smaller JPG images are used. A simple alignment algorithm performs an exhaustive search within a fixed window size of 30 pixels, starting from an initial offset guess of (0,0) by assuming all color channels are aligned perfectly at the beginning of each exhaustive search. Both red and green channels are then aligned to the blue channel based on the final offsets outputted by the simple exhaustive search algorithm.
+            <h3>Simple Alignment with Exhaustive Search</h3>
+            <p>To test the correctness of the alignment algorithm, the smaller JPG images are used. A simple alignment algorithm performs an exhaustive search within a fixed window size of 30 pixels, starting from an initial offset guess of (0, 0) by assuming all color channels are aligned perfectly at the beginning of each exhaustive search. Exhaustive search evaluates every integer shift (x, y) in the search window centered around the initial guess (0, 0) by shifting the other image with <code>np.roll</code> and computes a similarity score using the chosen metric, and keeps the shift that outputs the best score. Exhaustive search will then returns the best shift (dx, dy). At the end, both red and green channels are then aligned to the blue channel using <code>np.roll</code> based on the final offsets outputted by the simple exhaustive search algorithm.
             </p>
 
-            <p>To evaluate the similarities of two channel images based on the pixel values, metrics such as Sum of Squared Differences (SSD) and Normalized Cross Correlation (NCC) are used. Comparing the two metrics for scoring the pixel alignment,  NCC is chosen as it gives more robust and accurate alignment results compared to SSD.</p>
+            <p>To evaluate the similarities of two channel images based on the pixel values, metrics such as Sum of Squared Differences (SSD) and Normalized Cross Correlation (NCC) are used. Comparing the two metrics for scoring the pixel alignment, NCC is chosen as it gives more robust and accurate alignment results compared to SSD.</p>
             <h4>Parameters </h4>
             <ul>
               <li>Search Window: [-30, 30] pixels</li>
@@ -223,7 +223,7 @@ const CS180Proj1 = () => {
 
           <div id="pyramids" className="subsection">
             <h3>Alignment with Image Pyramids</h3>
-            <p>Exhaustive search works well on small images like JPG files, but is too slow and computationally expensive for the alignment of large TIFF files. Image pyramids are introduced to increase the speed of alignment for large images. The pyramid is built by repeatedly blurring and downsampling the previous higher resolution image by a factor of 2 until the smallest and coarsest image in the pyramid drops below 300 pixels. Alignment begins at the coarsest level, where a larger search window of 15 pixels is used. The estimated best guess alignment from the previous coarser image is then scaled up by a factor of 2 and refined at each finer level with a smaller window of 5 pixels. This approach is much faster and still finds accurate alignments for the TIFF images.</p>
+            <p>Exhaustive search works well on small images like JPG files, but is too slow and computationally expensive for the alignment of large TIFF files. Image pyramids are introduced to increase the speed of alignment for large images. The pyramid is built by repeatedly blurring and downsampling the previous higher resolution image by a factor of 2 (repeatedly halving the width and height of the image) using <code>cv2.resize</code> until the smallest and coarsest image in the pyramid drops below 300 pixels. The returned list of images will contain the original resolution at index 0 followed by progressively coarser image. Alignment begins at the coarsest level, where a larger search window of 15 pixels is used. The estimated best guess alignment from the previous coarser image is then scaled up by a factor of 2 and refined at each higher resolution level with a smaller window of 5 pixels. This alignment algorithm fundamentally uses the exhaustive search defined earlier, but with different search window sizes and alignment at each level of the image pyramid. This approach is much faster and still finds accurate alignments for the TIFF images.</p>
 
             <h4>Parameters (NCC)</h4>
             <ul>
@@ -231,6 +231,7 @@ const CS180Proj1 = () => {
               <li>Search window (fine levels): {params["no sobel"].search_window} pixels</li>
               <li>Search window (coarse level): {params["no sobel"].search_window_coarse} pixels</li>
             </ul>
+            <ImageGrid list={tiffsNoEmir} />
           </div>
 
           <div id="problems" className="subsection">
