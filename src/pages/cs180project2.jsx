@@ -238,7 +238,7 @@ const CS180Proj2 = () => {
 
               <p>To build a 2D convolution from scratch, we will first flip the kernel both horizontally and vertically and pad the input image with half of the kernel's height and half of the kernel's width with 0s. Using the grayscale image and this kernel, 2D convolution will produce a new image where each pixel in this new image is the weighted sum of its neighborhood in the original image.</p>
               <MathJax>
-                {"$$ (I * K)(i, j) = \\sum_{m=0}^{M-1} \\sum_{n=0}^{N-1} I(i+m, \\, j+n) \\, K(-m, \\, -n) $$"}
+                {"$$ (I * K)(x, y) = \\sum_{m=0}^{M-1} \\sum_{n=0}^{N-1} I(x+m, \\, y+n) \\, K(-m, \\, -n) $$"}
               </MathJax>
               <p>The following code snippets show the naive convolution using four for loops and two for loops respectively.</p>
             </MathJaxContext>
