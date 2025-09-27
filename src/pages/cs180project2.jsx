@@ -375,6 +375,10 @@ const CS180Proj2 = () => {
             <img src="cs180proj2/2.4final.png" alt=""/>
             
           </div>
+          <div>
+            <h2>Most Important Thing Learnt</h2>
+            <p>Many common image processing techniques like convolution, edge detection, smoothing, sharpening, hybrid images, and blending can all be understood in terms of frequency content and the frquency domain provide a lot of insights. I alos learnt to appreciate the beauty of convolution.</p>
+          </div>
 
         </section>
 
