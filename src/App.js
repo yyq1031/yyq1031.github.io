@@ -15,6 +15,7 @@ import { TRACKING_ID } from "./data/tracking";
 import "./app.css";
 import CS180Proj0 from "./pages/cs180project0";
 import CS180Proj1 from "./pages/cs180project1";
+import CS180Proj2 from "./pages/cs180project2";
 
 function App() {
 	useEffect(() => {
@@ -35,6 +36,7 @@ function App() {
 				<Route path="/cs180" element={<CS180 />} />
 				<Route path="/cs180/project0" element={<CS180Proj0 />} />
 				<Route path="/cs180/project1" element={<CS180Proj1 />} />
+				<Route path="/cs180/project2" element={<CS180Proj2 />} />
 				<Route path="*" element={<Notfound />} />
 			</Routes>
 		</div>
