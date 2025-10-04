@@ -161,7 +161,7 @@ html { scroll-behavior: smooth; }
 .math{ margin: 16px 0 24px; }
 
 
-img {
+#mediumimg {
   max-width: 80%;
   width: 80%;
   height: auto;

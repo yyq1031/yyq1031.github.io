@@ -3,18 +3,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { MathJaxContext, MathJax } from "better-react-mathjax";
 
 const CS180Proj2 = () => {
-  
-
-  const params = {
-    "no sobel": { downsampling_scale: 2, search_window: "[-5, 5]",  search_window_coarse: "[-15, 15]" },
-    "sobel":    { downsampling_scale: 2, search_window: "[-5, 5]", search_window_coarse: "[-15, 15]" }
-  };
-
-  const outPath = (file) => {
-    const stem = file.replace(/\.[^.]+$/, '');
-    return `/cs180proj1/out/${stem}_aligned.jpg`;
-  };
-
 
   // --- Scroll spy setup ---
   const sectionDefs = useMemo(() => ([
@@ -63,24 +51,7 @@ const CS180Proj2 = () => {
     };
   }, [sectionDefs]);
 
-  const ImageGrid = ({ list }) => (
-    <div className="photo-row">
-      {list.map(({ file, offsets }) => (
-        <div className="photo card" key={file}>
-          <div className="thumb">
-            <img src={outPath(file)} alt={`aligned-${file}`} loading="lazy" />
-          </div>
-          <div className="meta">
-            <p className="filename">{file}</p>
-            <div className="chips">
-              <span className="chip chip--green"><b>Green</b> dx {offsets.green.dx}, dy {offsets.green.dy}</span>
-              <span className="chip chip--red"><b>Red</b> dx {offsets.red.dx}, dy {offsets.red.dy}</span>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+ 
 
  
 
@@ -96,7 +67,7 @@ const CS180Proj2 = () => {
         kernel_flipped = kernel[::-1, ::-1].astype(np.float64)
         kernel_height, kernel_width = kernel_flipped.shape
         padding_height, padding_width = kernel_height // 2, kernel_width // 2
-        img = np.pad(image, pad_width=((kernel_height, padding_height), (kernel_width, padding_width)), mode='edge')
+        img = np.pad(image, pad_width=((kernel_height, padding_height), (kernel_width, padding_width)), mode='constant')
         for i in range(height):
             for j in range(width):
                 total = 0
@@ -113,7 +84,7 @@ const CS180Proj2 = () => {
         kernel_flipped = kernel[::-1, ::-1].astype(np.float64)
         kernel_height, kernel_width = kernel_flipped.shape
         padding_height, padding_width = kernel_height // 2, kernel_width // 2
-        img = np.pad(image, pad_width=((kernel_height, padding_height), (kernel_width, padding_width)), mode='edge')
+        img = np.pad(image, pad_width=((kernel_height, padding_height), (kernel_width, padding_width)), mode='constant')
         for i in range(height):
             for j in range(width):
                 output[i, j] = np.sum(img[i: i + kernel_height, j: j + kernel_width] * kernel_flipped)
@@ -252,7 +223,7 @@ const CS180Proj2 = () => {
             <p>In the naive implementation of convolve2d, I handle the boundaries by padding the image with 0s. The boundaries in signal.convolve2d is handled using <code>boundary='fill'</code> and <code> fillvalue=0</code> in a similar way.</p>
 
             <p>The following displays the output images of applying a 9x9 box filter, the finite difference operators D<sub>x</sub> and D<sub>y</sub> to my grayscale image. </p>
-            <img src="/cs180proj2/1.1.png" alt="" />
+            <img src="/cs180proj2/1.1.png" alt="" id="mediumimg"/>
           </div>
 
           <div id="1.2" className="subsection">
@@ -269,7 +240,7 @@ const CS180Proj2 = () => {
                 <li>Threshold: 0.2</li>
               </ul>
             </MathJaxContext>
-            <img src="cs180proj2/1.2.png" alt="" />
+            <img src="cs180proj2/1.2.png" alt="" id="mediumimg"/>
 
           </div>
 
@@ -282,7 +253,7 @@ const CS180Proj2 = () => {
                 <li>Gaussian Filter Sigma: 3.0</li>
                 <li>Threshold: 0.05</li>
               </ul>
-            <img src="cs180proj2/1.3part1.png" alt="" />
+            <img src="cs180proj2/1.3part1.png" alt="" id="mediumimg"/>
 
             <p>Now we will do a single convolution instead of two convolutions shown above by creating a derivative of the Gaussian filter <code>G</code>. This operation is going to be eqivalent to the above approach as convolution is both commutative and associative for linear filters like Gaussian filters. </p>
             <MathJaxContext version={3} className="math" config={config}>
@@ -326,10 +297,10 @@ const CS180Proj2 = () => {
               </ul>
             <img src="cs180proj2/2.1part3.png" alt="" id="bigimg"/>
             <p>The following are the sharpened images produced using different magnitudes of alpha:</p>
-            <img src="cs180proj2/2.1part1.png" alt="" />
+            <img src="cs180proj2/2.1part1.png" alt="" id="mediumimg" />
             <p>The original photo is very sharp. To evaluate the sharpening process, we will first blur it and then try to sharpen it again. </p>
 
-            <img src="cs180proj2/2.1part2.png" alt="" />
+            <img src="cs180proj2/2.1part2.png" alt="" id="mediumimg"/>
             <p>It is observed that the sharpened image with alpha = 1 looks the most identical to the original sharp image. As alpha grows beyond 1, the sharpened images start to look unreal as the high frequency details are amplified too much by the unsharp mask to the point that artifacts like ringing start appearing. Another observation is that even when we blur and sharpen using the same magnitude of sigma and alpha respectively, we can still see very significant differences from the original image. This is because blurring removes much high frequency details and this process is irreversible. Sharpening can only exaggerate whatever high frquency details are left, but it cannot restore the original detail that is lost during blurring. </p>
           </div>
 
@@ -350,7 +321,7 @@ const CS180Proj2 = () => {
             <p>My favorite hyrbid image of Nick and Judy from Zootopia:</p>
             <img src="cs180proj2/2.2nickjudy.png" alt="" id="bigimg"/>
             <h4>Gallery</h4>
-            <img src="cs180proj2/2.2gallery.png" alt="" />
+            <img src="cs180proj2/2.2gallery.png" alt="" id="mediumimg"/>
             
           </div>
 
@@ -367,12 +338,12 @@ const CS180Proj2 = () => {
           <div id="2.4" className="subsection">
             <h3>2.4: Multiresolution Blending</h3>
             <h4>Gallery</h4>
-            <img src="cs180proj2/2.4gallery.png"/>
+            <img src="cs180proj2/2.4gallery.png" id="mediumimg"/>
             <p>To produce the above output, I created a background, an object (on a white background), and the corresponding object mask. Following the same process, I created a Gaussian stack and Laplacian stack for the background image and object. I also created a Gaussian stack for object mask. Blending is then done at each level to produce the blended images. </p>
-            <img src="cs180proj2/2.4detailedgallery.png" />
+            <img src="cs180proj2/2.4detailedgallery.png" id="mediumimg"/>
             <h4>Favorite blended image: Ragdoll Sleeping on Marina Bay Sands</h4>
             <p>The follwoing images are the same size (I made the below in a rush so the images seem to have different sizes but they actually are the same size.)</p>
-            <img src="cs180proj2/2.4final.png" alt=""/>
+            <img src="cs180proj2/2.4final.png" alt="" id="mediumimg"/>
             
           </div>
           <div>
