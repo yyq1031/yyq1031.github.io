@@ -233,6 +233,58 @@ const CS180Proj3 = () => {
         </MathJaxContext>
           <img src="/cs180proj3/a2.png" className="mediumimg" alt="" loading="lazy" decoding="async" />
           <MathJaxContext>
+            <p>System of linear equations: </p>
+              <MathJax>{String.raw`
+\[
+A\,
+\underbrace{\begin{bmatrix}
+h_1\\ h_2\\ h_3\\ h_4\\ h_5\\ h_6\\ h_7\\ h_8
+\end{bmatrix}}_{\mathbf{h}}
+\;=\;
+\mathbf{b}
+\]
+`}</MathJax>
+
+<MathJax>{String.raw`
+\[
+A =
+\begin{bmatrix}
+3120 & 805 & 1 & 0 & 0 & 0 & -5519280 & -1424045 \\
+0 & 0 & 0 & 3120 & 805 & 1 & -2224560 & -573965 \\
+4364 & 718 & 1 & 0 & 0 & 0 & -12978536 & -2135332 \\
+0 & 0 & 0 & 4364 & 718 & 1 & -3430104 & -564348 \\
+3116 & 2320 & 1 & 0 & 0 & 0 & -5490392 & -4087840 \\
+0 & 0 & 0 & 3116 & 2320 & 1 & -7157452 & -5329040 \\
+3984 & 1328 & 1 & 0 & 0 & 0 & -10493856 & -3497952 \\
+0 & 0 & 0 & 3984 & 1328 & 1 & -5326608 & -1775536 \\
+4837 & 1278 & 1 & 0 & 0 & 0 & -16266831 & -4297914 \\
+0 & 0 & 0 & 4837 & 1278 & 1 & -6534787 & -1726578 \\
+3706 & 749 & 1 & 0 & 0 & 0 & -8779514 & -1774381 \\
+0 & 0 & 0 & 3706 & 749 & 1 & -2731322 & -552013 \\
+3757 & 741 & 1 & 0 & 0 & 0 & -9084426 & -1791738 \\
+0 & 0 & 0 & 3757 & 741 & 1 & -2765152 & -545376 \\
+3772 & 731 & 1 & 0 & 0 & 0 & -9173504 & -1777792 \\
+0 & 0 & 0 & 3772 & 731 & 1 & -2742244 & -531437 \\
+3823 & 726 & 1 & 0 & 0 & 0 & -9496332 & -1803384 \\
+0 & 0 & 0 & 3823 & 726 & 1 & -2790790 & -529980 \\
+4319 & 1286 & 1 & 0 & 0 & 0 & -12637394 & -3762836 \\
+0 & 0 & 0 & 4319 & 1286 & 1 & -5726994 & -1705236 \\
+4537 & 1272 & 1 & 0 & 0 & 0 & -14155440 & -3968640 \\
+0 & 0 & 0 & 4537 & 1272 & 1 & -6011525 & -1685400 \\
+4327 & 1566 & 1 & 0 & 0 & 0 & -12686764 & -4591512 \\
+0 & 0 & 0 & 4327 & 1566 & 1 & -6862622 & -2483676 \\
+4556 & 1547 & 1 & 0 & 0 & 0 & -14242056 & -4835922 \\
+0 & 0 & 0 & 4556 & 1547 & 1 & -7221260 & -2451995
+\end{bmatrix}
+\qquad
+\mathbf{b} =
+\begin{bmatrix}
+1769 \\ 713 \\ 2974 \\ 786 \\ 1762 \\ 2297 \\ 2634 \\ 1337 \\ 3363 \\ 1351 \\
+2369 \\ 737 \\ 2418 \\ 736 \\ 2432 \\ 727 \\ 2484 \\ 730 \\ 2926 \\ 1326 \\
+3120 \\ 1325 \\ 2932 \\ 1586 \\ 3126 \\ 1585
+\end{bmatrix}
+\]
+`}</MathJax>
             <MathJax>{String.raw`\[
             H =
             \begin{bmatrix}
@@ -389,9 +441,303 @@ const CS180Proj3 = () => {
             </div>
           </div>
 
+          <div className='subsection'>
+            <h3 id="B1">B.1: Harris Corner Detection</h3>
+            <MathJaxContext>
+            <p>
+              The Harris corner detector finds interest points that are stable under small window and illumination changes. 
+              A corner is a location where image intensity changes strongly in two perpendicular directions. 
+              We compute the image gradients{" "}
+              <MathJax inline>{String.raw`\(I_x\)`}</MathJax> and{" "}
+              <MathJax inline>{String.raw`\(I_y\)`}</MathJax>, and for each pixel build the second-moment matrix:
+            </p>
+
+            <MathJax>{String.raw`
+            \[
+            M = \begin{bmatrix}
+            I_x^2 &  I_x I_y  \\
+            I_x I_y & I_y^2 
+            \end{bmatrix}
+            \]
+            `}</MathJax>
+
+            <p>
+              The Harris response represents how corner-like a small window in the image is. We will keep local maxima of this response and drop a small border around every image so the window is fully inside the image. The result is many clustered corners in textured areas, so we will need to use Adaptive Non-Maximal Suppression (ANMS) 
+              to select a subset of corners that is both strong and well-distributed. For each corner, we define a suppression radius, which is the distance to the nearest stronger corner. 
+              Points with large radii are either global maximum or the strongest in a very large neighborhood of pixel values. We will then sort the points by radius and keep the top 500 points as 500 points provides a good spatial coverage of the image without losing many distinctive structure.
+            </p>
+
+            <p>
+             For each identified point{" "}
+              <MathJax inline>{String.raw`\(x_i, y_i \in I\)`}</MathJax> with corner strength{" "}
+              <MathJax inline>{String.raw`\(h(x_i, y_i)\)`}</MathJax>, the suppression radius{" "}
+              <MathJax inline>{String.raw`\(r_i\)`}</MathJax> is the distance to the nearest {" "}
+              significantly stronger neighbor with strength larger by a robustness factor{" "}
+              <MathJax inline>{String.raw`\(c_{\mathrm{robust}} = 0.9\)`}</MathJax>. Distances are computed as:
+            </p>
+
+            <MathJax>{String.raw`
+            \[
+            r_i \;=\; \min_{x_j \in I} \;\bigl\lVert x_i - x_j \bigr\rVert
+            \quad \text{s.t.} \quad f(x_i) \;<\; c_{\mathrm{robust}} \, f(x_j).
+            \]
+            `}</MathJax>
+            </MathJaxContext>
+
+            <div className="image-sets1">
+              <section className="harris">
+
+                <article className="image-card">
+                  <img src="/cs180proj3/hnoanms.png" alt="Detected corners without ANMS (min_dist = 1)" />
+                  <p className="set-title">Detected Corners without ANMS (min_dist = 1)</p>
+                </article>
+
+                <article className="image-card">
+                  <img src="/cs180proj3/hnoanmsfilter5.png" alt="Detected corners without ANMS (min_dist = 5)" />
+                  <p className="set-title">Detected Corners without ANMS (min_dist = 5)</p>
+                </article>
+
+                <article className="image-card">
+                  <img src="/cs180proj3/hnoanmsfilter10.png" alt="Detected corners without ANMS (min_dist = 10)" />
+                  <p className="set-title">Detected Corners without ANMS (min_dist = 10)</p>
+                </article>
+
+                <article className="image-card">
+                  <img src="/cs180proj3/hanms500.png" alt="Detected corners with ANMS" />
+                  <p className="set-title">Detected Corners with ANMS</p>
+                </article>
+
+              </section>      
+            </div>
+
+          </div>
+          <div className="subsection" id="B2">
+            <h3>B.2: Feature Descriptor Extraction</h3>
+            <p>
+              After performing ANMS to get the strong and well-spread-out corners, we will next identify which of these points correspond to overlapping regions between the two images. To achieve this, we extract a feature descriptor of size 40x40 pixels for each croner found in the previous step. This descriptor compares features between two images
+              in a robust way. Before resizing, the (40x40) descriptor is first blurred to reduce alising during the sampling process. Then the (40x40) descriptor will be resized to (8x8). Lastly, the pixel values in the descriptor patch are normalized to make the descriptor invariant to brightness or contrast changes globally and then flattened into a one-dimensional vector containing all three RGB channels.
+            </p>
+            {/* --- Set 1 --- */}
+            <section className="rectify-section">
+              <p className="set-title">Set 1</p>
+              <div className="rectify-grid">
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f1_40x40.png" alt="Set 1 — Feature 1 (40x40)" />
+                  <figcaption>Feature 1 (40x40)</figcaption>
+                </figure>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f1_40x40_blurred.png" alt="Set 1 — Blurred Feature 1 (40x40)" />
+                  <figcaption>Blurred Feature 1 (40x40)</figcaption>
+                </figure>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f1_8x8.png" alt="Set 1 — Feature 1 (8x8)" />
+                  <figcaption>Feature 1 (8x8)</figcaption>
+                </figure>
+              </div>
+            </section>
+
+            {/* --- Set 2 --- */}
+            <section className="rectify-section">
+              <p className="set-title">Set 2</p>
+              <div className="rectify-grid">
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f2_40x40.png" alt="Set 2 — Feature 1" />
+                  <figcaption>Feature 2 (40x40)</figcaption>
+                </figure>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f2_40x40_blurred.png" alt="Set 2 — Feature 2" />
+                  <figcaption>Blurred Feature 2 (40x40)</figcaption>
+                </figure>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f2_8x8.png" alt="Set 2 — Feature 3" />
+                  <figcaption>Feature 2 (8x8)</figcaption>
+                </figure>
+              </div>
+            </section>
+
+            {/* --- Set 3 --- */}
+            <section className="rectify-section">
+              <p className="set-title">Set 3</p>
+              <div className="rectify-grid">
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f3_40x40.png" alt="Set 3 — Feature 1" />
+                  <figcaption>Feature 3 (40x40)</figcaption>
+                </figure>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f3_40x40_blurred.png" alt="Set 3 — Feature 2" />
+                  <figcaption>Blurred Feature 3 (40x40)</figcaption>
+                </figure>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f3_8x8.png" alt="Set 3 — Feature 3" />
+                  <figcaption>Feature 3 (8x8)</figcaption>
+                </figure>
+              </div>
+            </section>
+
+            {/* --- Set 4 --- */}
+            <section className="rectify-section">
+              <p className="set-title">Set 4</p>
+              <div className="rectify-grid">
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f4_40x40.png" alt="Set 4 — Feature 1" />
+                  <figcaption>Feature 4 (40x40)</figcaption>
+                </figure>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f4_40x40_blurred.png" alt="Set 4 — Feature 2" />
+                  <figcaption>Blurred Feature 4 (40x40)</figcaption>
+                </figure>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f4_8x8.png" alt="Set 4 — Feature 3" />
+                  <figcaption>Feature 4 (8x8)</figcaption>
+                </figure>
+              </div>
+            </section>
+
+            {/* --- Set 5 --- */}
+            <section className="rectify-section">
+              <p className="set-title">Set 5</p>
+              <div className="rectify-grid">
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f5_40x40.png" alt="Set 5 — Feature 1" />
+                  <figcaption>Feature 5 (40x40)</figcaption>
+                </figure>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f5_40x40_blurred.png" alt="Set 5 — Feature 2" />
+                  <figcaption>Blurred Feature 5 (40x40)</figcaption>
+                </figure>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/f5_8x8.png" alt="Set 5 — Feature 3" />
+                  <figcaption>Feature 5 (8x8)</figcaption>
+                </figure>
+              </div>
+            </section>
+          </div>
+
+          <div className="subsection" id="B3">
+            <h3>B.3: Feature Matching</h3>
+            <MathJaxContext>
+            <p>Feature matching matches correspondences across two images. For each feature descriptor in image 1, we will search all available feature descriptors in image 2 and choose the one with the smallest dissimilarity. This is the pair of features that have the smallest L2 distance between their descriptors. 
+            </p>
+            <p>However, this may not always be accuarate. Hence, during matching, we first identify the two nearest neighbors for each descriptor (first nearest neighbor and second nearest neighbor that have the lowest and second-lowest L2 distances respectively, denoted by <code>dist1</code> and <code>dist2</code>). To ensure reliable matches,
+              we apply Lowe’s ratio to check whether the best match is significantly better than
+              the next best match. The ratio <MathJax inline>{String.raw`\( \frac{dist1}{dist2} \)`}</MathJax> must
+              be less than a chosen threshold (chosen to be 0.68) to be accepted as a valid match of correspondences. If not, both points are rejected and discarded to prevent false correspondences. Finally, this matching process is repeated for all features in both images and only keeping mutual matches to ensure consistent and robust correspondences.
+            </p>
+            </MathJaxContext>
+
+            {/* --- Row 1 --- */}
+            <section className="rectify-section">
+              <div className="rectify-grid" style={{ gridTemplateColumns: '1fr' }}>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/match1.png" alt="Feature Matching — Row 1" />
+                  <figcaption>match1.png</figcaption>
+                </figure>
+              </div>
+            </section>
+
+            {/* --- Row 2 --- */}
+            <section className="rectify-section">
+              <div className="rectify-grid" style={{ gridTemplateColumns: '1fr' }}>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/match2.png" alt="Feature Matching — Row 2" />
+                  <figcaption>match2.png</figcaption>
+                </figure>
+              </div>
+            </section>
+
+            {/* --- Row 3 --- */}
+            <section className="rectify-section">
+              <div className="rectify-grid" style={{ gridTemplateColumns: '1fr' }}>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/match3.png" alt="Feature Matching — Row 3" />
+                  <figcaption>match3.png</figcaption>
+                </figure>
+              </div>
+            </section>
+          </div>
+
+
+          <div className="subsection" id="B4">
+            <h3>B.4: RANSAC for Robust Homography</h3>
+            <MathJaxContext>
+            <h4>Procedure</h4>
+            <ol style={{ lineHeight: 1.7 }}>
+              <li>
+                Select four feature pairs at random without replacement to form a minimal set needed for homography estimation
+              </li>
+              <li>
+                Compute the exact homography{" "}
+                <MathJax inline>{String.raw`\(H\)`}</MathJax> 
+              </li>
+              <li>
+                Count inliers for every computed homography{" "}
+                <MathJax inline>{String.raw`\(H\)`}</MathJax> 
+              </li>
+              <li>
+                Keep the homography {" "}
+                <MathJax inline>{String.raw`\(H\)`}</MathJax>  with the most inliers and store this set of best inliers
+              </li>
+              <li>
+                Find the best {" "}
+                <MathJax inline>{String.raw`\(H\)`}</MathJax> using all inliers by performing least squares estimation to obtain the most robust homography  {" "}
+                <MathJax inline>{String.raw`\(H\)`}</MathJax> 
+              </li>
+            </ol>
+            <h4>Parameters</h4>
+            <ul>
+              <li>Iterations: 1000</li>
+              <li>Threshold: 1 pixel</li>
+            </ul>
+            </MathJaxContext>
+
+            {/* --- Set 1 --- */}
+            <section className="rectify-section">
+              <p className="set-title">Set 1</p>
+              <div className="rectify-grid" style={{ gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/mosaic1.jpg" alt="Set 1 — Manual Stitching" />
+                  <figcaption>Set 1 — Manual Stitching (mosaic1.jpg)</figcaption>
+                </figure>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/auto3.jpg" alt="Set 1 — Auto Stitching" />
+                  <figcaption>Set 1 — Auto Stitching (auto1.jpg)</figcaption>
+                </figure>
+              </div>
+            </section>
+
+            {/* --- Set 2 --- */}
+            <section className="rectify-section">
+              <p className="set-title">Set 2</p>
+              <div className="rectify-grid" style={{ gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/mosaic2.jpg" alt="Set 2 — Manual Stitching" />
+                  <figcaption>Set 2 — Manual Stitching (mosaic2.jpg)</figcaption>
+                </figure>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/auto2.jpg" alt="Set 2 — Auto Stitching" />
+                  <figcaption>Set 2 — Auto Stitching (auto2.jpg)</figcaption>
+                </figure>
+              </div>
+            </section>
+
+            {/* --- Set 3 --- */}
+            <section className="rectify-section">
+              <p className="set-title">Set 3</p>
+              <div className="rectify-grid" style={{ gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/mosaic3.jpg" alt="Set 3 — Manual Stitching" />
+                  <figcaption>Set 3 — Manual Stitching (mosaic1.jpg)</figcaption>
+                </figure>
+                <figure className="rectify-card">
+                  <img src="/cs180proj3/auto1.jpg" alt="Set 3 — Auto Stitching" />
+                  <figcaption>Set 3 — Auto Stitching (auto3.jpg)</figcaption>
+                </figure>
+              </div>
+            </section>
+          </div>
 
         </section>
-
+        
       </main>
     </div>
   );

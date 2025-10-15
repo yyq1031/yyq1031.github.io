@@ -315,8 +315,44 @@ figcaption {
     grid-template-columns: 1fr;
   }
 }
+/* constrain the whole gallery width so items don't stretch too large */
+.image-sets1 {
+  max-width: 960px;     /* adjust 800–1000px to taste */
+  margin: 2rem auto;    /* center on the page */
+}
 
+/* force a 2-column grid on tablets/desktop; 1 col on small screens */
+.image-sets1 .harris {
+  display: grid;
+  grid-template-columns: 1fr;   /* default: 1 per row on small screens */
+  gap: 12px;
+}
 
+@media (min-width: 600px) {
+  .image-sets1 .harris {
+    grid-template-columns: repeat(2, 1fr);  /* 2 per row */
+  }
+}
 
+/* make each card feel smaller */
+.image-sets1 .harris .image-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  padding: 8px;
+}
 
+/* show full image (no crop) but cap its height to keep it small */
+.image-sets1 .harris .image-card img {
+  width: 100%;
+  height: auto;          /* preserve aspect ratio */
+  max-height: 220px;     /* <-- reduce overall size; adjust 180–260 */
+  object-fit: contain;   /* no cropping */
+  display: block;
+}
 
+/* slightly smaller captions */
+.image-sets1 .harris .image-card .set-title {
+  font-size: 0.92rem;
+  margin-top: 8px;
+  text-align: center;
+}
