@@ -160,7 +160,7 @@ const CS180Proj3 = () => {
           `}</MathJax>
 
         <p>
-          We cross–multiplying each
+          We cross-multiplying each
           correspondence <MathJax inline>{String.raw`\((x,y)\mapsto(\lambda u,\lambda v)\)`}</MathJax>{" "}
           gives two linear equations in the 8 unknowns{" "}
           <MathJax inline>{String.raw`\(\mathbf{h}=[h_{1},h_{2},h_{3},h_{4},h_{5},h_{6},h_{7},h_{8}]^\top\)`}</MathJax>:
@@ -231,60 +231,94 @@ const CS180Proj3 = () => {
         `}</MathJax>
           </div>
         </MathJaxContext>
+        <p>System of linear equations: </p>
+            <MathJaxContext>
+              <MathJax>{String.raw`
+              \[
+              A\,
+              \underbrace{\begin{bmatrix}
+              h_1\\ h_2\\ h_3\\ h_4\\ h_5\\ h_6\\ h_7\\ h_8
+              \end{bmatrix}}_{\mathbf{h}}
+              \;=\;
+              \mathbf{b}
+              \]
+              `}</MathJax>
+            
+          <img src="/cs180proj3/a2rectified.png" className="mediumimg" alt="" loading="lazy" decoding="async" />
+          <MathJax>{String.raw`
+            \[
+            A =
+            \begin{bmatrix}
+            992 & 849 & 1 & 0 & 0 & 0 & -793600 & -679200 \\
+            0 & 0 & 0 & 992 & 849 & 1 & -843200 & -721650 \\
+            916 & 2995 & 1 & 0 & 0 & 0 & -732800 & -2396000 \\
+            0 & 0 & 0 & 916 & 2995 & 1 & -3206000 & -10482500 \\
+            1924 & 3365 & 1 & 0 & 0 & 0 & -3848000 & -6730000 \\
+            0 & 0 & 0 & 1924 & 3365 & 1 & -6734000 & -11777500 \\
+            2085 & 1017 & 1 & 0 & 0 & 0 & -4170000 & -2034000 \\
+            0 & 0 & 0 & 2085 & 1017 & 1 & -1772250 & -864450
+            \end{bmatrix}
+            \qquad
+            \mathbf{b} =
+            \begin{bmatrix}
+            800 \\ 850 \\ 800 \\ 3500 \\ 2000 \\ 3500 \\ 2000 \\ 850
+            \end{bmatrix}
+            \]
+            `}</MathJax>
+
+          <MathJax>{String.raw`\[
+          H =
+          \begin{bmatrix}
+          1.40153561 & 2.35624148\times 10^{-2} & -5.41731421\times 10^{2} \\
+          -9.74387595\times 10^{-2} & 1.22322053 & -1.89713058\times 10^{1} \\
+          1.10966319\times 10^{-4} & -2.86608877\times 10^{-5} & 1
+          \end{bmatrix}
+          \]`}</MathJax>
+          </MathJaxContext>
           <img src="/cs180proj3/a2.png" className="mediumimg" alt="" loading="lazy" decoding="async" />
           <MathJaxContext>
-            <p>System of linear equations: </p>
-              <MathJax>{String.raw`
-\[
-A\,
-\underbrace{\begin{bmatrix}
-h_1\\ h_2\\ h_3\\ h_4\\ h_5\\ h_6\\ h_7\\ h_8
-\end{bmatrix}}_{\mathbf{h}}
-\;=\;
-\mathbf{b}
-\]
-`}</MathJax>
+            
 
-<MathJax>{String.raw`
-\[
-A =
-\begin{bmatrix}
-3120 & 805 & 1 & 0 & 0 & 0 & -5519280 & -1424045 \\
-0 & 0 & 0 & 3120 & 805 & 1 & -2224560 & -573965 \\
-4364 & 718 & 1 & 0 & 0 & 0 & -12978536 & -2135332 \\
-0 & 0 & 0 & 4364 & 718 & 1 & -3430104 & -564348 \\
-3116 & 2320 & 1 & 0 & 0 & 0 & -5490392 & -4087840 \\
-0 & 0 & 0 & 3116 & 2320 & 1 & -7157452 & -5329040 \\
-3984 & 1328 & 1 & 0 & 0 & 0 & -10493856 & -3497952 \\
-0 & 0 & 0 & 3984 & 1328 & 1 & -5326608 & -1775536 \\
-4837 & 1278 & 1 & 0 & 0 & 0 & -16266831 & -4297914 \\
-0 & 0 & 0 & 4837 & 1278 & 1 & -6534787 & -1726578 \\
-3706 & 749 & 1 & 0 & 0 & 0 & -8779514 & -1774381 \\
-0 & 0 & 0 & 3706 & 749 & 1 & -2731322 & -552013 \\
-3757 & 741 & 1 & 0 & 0 & 0 & -9084426 & -1791738 \\
-0 & 0 & 0 & 3757 & 741 & 1 & -2765152 & -545376 \\
-3772 & 731 & 1 & 0 & 0 & 0 & -9173504 & -1777792 \\
-0 & 0 & 0 & 3772 & 731 & 1 & -2742244 & -531437 \\
-3823 & 726 & 1 & 0 & 0 & 0 & -9496332 & -1803384 \\
-0 & 0 & 0 & 3823 & 726 & 1 & -2790790 & -529980 \\
-4319 & 1286 & 1 & 0 & 0 & 0 & -12637394 & -3762836 \\
-0 & 0 & 0 & 4319 & 1286 & 1 & -5726994 & -1705236 \\
-4537 & 1272 & 1 & 0 & 0 & 0 & -14155440 & -3968640 \\
-0 & 0 & 0 & 4537 & 1272 & 1 & -6011525 & -1685400 \\
-4327 & 1566 & 1 & 0 & 0 & 0 & -12686764 & -4591512 \\
-0 & 0 & 0 & 4327 & 1566 & 1 & -6862622 & -2483676 \\
-4556 & 1547 & 1 & 0 & 0 & 0 & -14242056 & -4835922 \\
-0 & 0 & 0 & 4556 & 1547 & 1 & -7221260 & -2451995
-\end{bmatrix}
-\qquad
-\mathbf{b} =
-\begin{bmatrix}
-1769 \\ 713 \\ 2974 \\ 786 \\ 1762 \\ 2297 \\ 2634 \\ 1337 \\ 3363 \\ 1351 \\
-2369 \\ 737 \\ 2418 \\ 736 \\ 2432 \\ 727 \\ 2484 \\ 730 \\ 2926 \\ 1326 \\
-3120 \\ 1325 \\ 2932 \\ 1586 \\ 3126 \\ 1585
-\end{bmatrix}
-\]
-`}</MathJax>
+            <MathJax>{String.raw`
+            \[
+            A =
+            \begin{bmatrix}
+            3120 & 805 & 1 & 0 & 0 & 0 & -5519280 & -1424045 \\
+            0 & 0 & 0 & 3120 & 805 & 1 & -2224560 & -573965 \\
+            4364 & 718 & 1 & 0 & 0 & 0 & -12978536 & -2135332 \\
+            0 & 0 & 0 & 4364 & 718 & 1 & -3430104 & -564348 \\
+            3116 & 2320 & 1 & 0 & 0 & 0 & -5490392 & -4087840 \\
+            0 & 0 & 0 & 3116 & 2320 & 1 & -7157452 & -5329040 \\
+            3984 & 1328 & 1 & 0 & 0 & 0 & -10493856 & -3497952 \\
+            0 & 0 & 0 & 3984 & 1328 & 1 & -5326608 & -1775536 \\
+            4837 & 1278 & 1 & 0 & 0 & 0 & -16266831 & -4297914 \\
+            0 & 0 & 0 & 4837 & 1278 & 1 & -6534787 & -1726578 \\
+            3706 & 749 & 1 & 0 & 0 & 0 & -8779514 & -1774381 \\
+            0 & 0 & 0 & 3706 & 749 & 1 & -2731322 & -552013 \\
+            3757 & 741 & 1 & 0 & 0 & 0 & -9084426 & -1791738 \\
+            0 & 0 & 0 & 3757 & 741 & 1 & -2765152 & -545376 \\
+            3772 & 731 & 1 & 0 & 0 & 0 & -9173504 & -1777792 \\
+            0 & 0 & 0 & 3772 & 731 & 1 & -2742244 & -531437 \\
+            3823 & 726 & 1 & 0 & 0 & 0 & -9496332 & -1803384 \\
+            0 & 0 & 0 & 3823 & 726 & 1 & -2790790 & -529980 \\
+            4319 & 1286 & 1 & 0 & 0 & 0 & -12637394 & -3762836 \\
+            0 & 0 & 0 & 4319 & 1286 & 1 & -5726994 & -1705236 \\
+            4537 & 1272 & 1 & 0 & 0 & 0 & -14155440 & -3968640 \\
+            0 & 0 & 0 & 4537 & 1272 & 1 & -6011525 & -1685400 \\
+            4327 & 1566 & 1 & 0 & 0 & 0 & -12686764 & -4591512 \\
+            0 & 0 & 0 & 4327 & 1566 & 1 & -6862622 & -2483676 \\
+            4556 & 1547 & 1 & 0 & 0 & 0 & -14242056 & -4835922 \\
+            0 & 0 & 0 & 4556 & 1547 & 1 & -7221260 & -2451995
+            \end{bmatrix}
+            \qquad
+            \mathbf{b} =
+            \begin{bmatrix}
+            1769 \\ 713 \\ 2974 \\ 786 \\ 1762 \\ 2297 \\ 2634 \\ 1337 \\ 3363 \\ 1351 \\
+            2369 \\ 737 \\ 2418 \\ 736 \\ 2432 \\ 727 \\ 2484 \\ 730 \\ 2926 \\ 1326 \\
+            3120 \\ 1325 \\ 2932 \\ 1586 \\ 3126 \\ 1585
+            \end{bmatrix}
+            \]
+            `}</MathJax>
             <MathJax>{String.raw`\[
             H =
             \begin{bmatrix}
@@ -293,6 +327,7 @@ A =
             1.28402473\times 10^{-4} & 1.38496925\times 10^{-5} & 1
             \end{bmatrix}
             \]`}</MathJax>
+            
           </MathJaxContext>
           </div>
 
@@ -348,9 +383,9 @@ A =
                 <MathJax>{String.raw`\[
                 H_{\text{im}\to\text{ref}} =
                 \begin{bmatrix}
-                h_{11} & h_{12} & h_{13} \\
-                h_{21} & h_{22} & h_{23} \\
-                h_{31} & h_{32} & h_{33}
+                h_{1} & h_{2} & h_{3} \\
+                h_{4} & h_{5} & h_{6} \\
+                h_{7} & h_{8} & 1
                 \end{bmatrix}
                 \]`}
                 </MathJax>
@@ -374,9 +409,9 @@ A =
                   \]`}            
                 </MathJax>
               </MathJaxContext>
-              <ol>4. Create smooth alpha masks for blending</ol>
+              <ol>4. Create smooth alpha masks for blending using <code>distance_transform_edt</code></ol>
               <ol>5. Warp all images and their corresponding masks into the canvas</ol>
-              <ol>6. Use a weighted average for a feathered blending</ol>
+              <ol>6. Use a weighted average for a smooth blending to reduce edge artifacts</ol>
               
               
             </ul>
@@ -488,23 +523,23 @@ A =
               <section className="harris">
 
                 <article className="image-card">
-                  <img src="/cs180proj3/hnoanms.png" alt="Detected corners without ANMS (min_dist = 1)" />
-                  <p className="set-title">Detected Corners without ANMS (min_dist = 1)</p>
+                  <img src="/cs180proj3/hnoanms.png" alt="Detected corners without ANMS (min_distance = 1)" />
+                  <p className="set-title">Detected Corners without ANMS (min_distance = 1)</p>
                 </article>
 
                 <article className="image-card">
-                  <img src="/cs180proj3/hnoanmsfilter5.png" alt="Detected corners without ANMS (min_dist = 5)" />
-                  <p className="set-title">Detected Corners without ANMS (min_dist = 5)</p>
+                  <img src="/cs180proj3/hnoanmsfilter5.png" alt="Detected corners without ANMS (min_distance = 5)" />
+                  <p className="set-title">Detected Corners without ANMS (min_distance = 5)</p>
                 </article>
 
                 <article className="image-card">
-                  <img src="/cs180proj3/hnoanmsfilter10.png" alt="Detected corners without ANMS (min_dist = 10)" />
-                  <p className="set-title">Detected Corners without ANMS (min_dist = 10)</p>
+                  <img src="/cs180proj3/hnoanmsfilter10.png" alt="Detected corners without ANMS (min_distance = 10)" />
+                  <p className="set-title">Detected Corners without ANMS (min_distance = 10)</p>
                 </article>
 
                 <article className="image-card">
                   <img src="/cs180proj3/hanms500.png" alt="Detected corners with ANMS" />
-                  <p className="set-title">Detected Corners with ANMS</p>
+                  <p className="set-title">Detected Corners with ANMS (min_distance = 10)</p>
                 </article>
 
               </section>      
@@ -616,10 +651,10 @@ A =
           <div className="subsection" id="B3">
             <h3>B.3: Feature Matching</h3>
             <MathJaxContext>
-            <p>Feature matching matches correspondences across two images. For each feature descriptor in image 1, we will search all available feature descriptors in image 2 and choose the one with the smallest dissimilarity. This is the pair of features that have the smallest L2 distance between their descriptors. 
+            <p>Feature matching matches correspondences across two images. For each feature descriptor in image 1, we will search all available feature descriptors in image 2 and choose the one with the smallest dissimilarity. This is the pair of features that have the smallest sum of squared distances (SSD) between their descriptors. 
             </p>
-            <p>However, this may not always be accuarate. Hence, during matching, we first identify the two nearest neighbors for each descriptor (first nearest neighbor and second nearest neighbor that have the lowest and second-lowest L2 distances respectively, denoted by <code>dist1</code> and <code>dist2</code>). To ensure reliable matches,
-              we apply Lowe’s ratio to check whether the best match is significantly better than
+            <p>However, this may not always be accuarate. Hence, during matching, we first identify the two nearest neighbors for each descriptor (first nearest neighbor and second nearest neighbor that have the lowest and second-lowest SSD respectively, denoted by <code>dist1</code> and <code>dist2</code>). To ensure reliable matches,
+              we apply Lowe's ratio to check whether the best match is significantly better than
               the next best match. The ratio <MathJax inline>{String.raw`\( \frac{dist1}{dist2} \)`}</MathJax> must
               be less than a chosen threshold (chosen to be 0.68) to be accepted as a valid match of correspondences. If not, both points are rejected and discarded to prevent false correspondences. Finally, this matching process is repeated for all features in both images and only keeping mutual matches to ensure consistent and robust correspondences.
             </p>
