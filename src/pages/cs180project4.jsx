@@ -197,11 +197,11 @@ const CS180Proj4 = () => {
             <h3>PSNR Curves (Training) </h3>
             <div className="image-row">
               <figure className="image-card">
-                <img src="/cs180proj4/fox_psnr.png" alt="" className="bigimg" />
+                <img src="/cs180proj4/fox_PSNR.png" alt="" className="bigimg" />
                 <figcaption>Fox PSNR during training</figcaption>
               </figure>
               <figure className="image-card">
-                <img src="/cs180proj4/pumpkin_psnr.png" alt="" className="bigimg" />
+                <img src="/cs180proj4/pumpkin_PSNR.png" alt="" className="bigimg" />
                 <figcaption>Pumpkin PSNR during training</figcaption>
               </figure>
             </div>
