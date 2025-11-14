@@ -8,6 +8,7 @@ const CS180 = () => {
             <p><Link to="/cs180/project1">Project 1</Link></p>
             <p><Link to="/cs180/project2">Project 2</Link></p>
             <p><Link to="/cs180/project3">Project 3</Link></p>
+            <p><Link to="/cs180/project4">Project 4</Link></p>
         </div>
     )
 }
