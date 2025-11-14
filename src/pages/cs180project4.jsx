@@ -178,9 +178,21 @@ const CS180Proj4 = () => {
               <img src="/cs180proj4/hyper.png" alt="" className="bigimg" />
               <figcaption>PSNR across different hyperparameter choices</figcaption>
             </figure>
+
             <p>L = 10 performs better than L = 20 as it can capture the fine details like whiskers and fur color of the fox better. This is because reconstructing the 2D fox is a fairly simple task so setting a very large L (like L = 20) makes the hidden space larger than what is actually needed. L = 20 gives a more expressive network with a much larger first hidden layer size and more parameters, making optimization more tricky and less robust.</p>
 
             <p>Hidden Layer = 256 performs much better than Hidden Layer = 128 as the fine details on the fox face can be seen clearly. On the other hand, the reconstructed fox face looks slightly blurry when the hidden layer decreases to 128. This is because as hidden layer size decreases, the expressive power of the model drops and it is not able to reconstruct all the fine details of the images.</p>
+
+            <h4>Very Low Values of Hyperparameters </h4>
+            <h5>L = 1</h5>
+            <figure className="image-card">
+              <img src="/cs180proj4/hyperL1.png" alt="" className="smallimg" />
+            </figure>
+
+            <h5>Hidden Layer = 16</h5>
+            <figure className="image-card">
+              <img src="/cs180proj4/hyperH16.png" alt="" className="smallimg" />
+            </figure>
 
             <h3>PSNR Curves (Training) </h3>
             <div className="image-row">
