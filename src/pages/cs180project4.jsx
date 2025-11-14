@@ -281,7 +281,7 @@ const CS180Proj4 = () => {
             <h3>2.5: Volume Rendering</h3>
             <p>
             Discrete volumetric rendering helps render a pixel from the NeRF. For every sampled point along a ray, the neural network predicts a density <code>σ</code> and color <code>rgb</code>. Firstly, I convert the outputted densities into per-interval opacities <code>α = 1 − exp(−σ Δt)</code>, where <code>Δt</code> is the step size between samples. The cumulative transmittance <code>T</code> is computed with a forward cumulative product, representing the probability that the ray has not terminated before every sample. The final pixel color is the weighted sum over all samples.
-            <code>∑ T_i · α_i · rgb_i</code> matches the rendering formulation from the NeRF slides. Finally, I sum the contributions.
+            <code>∑ T_i · α_i · color_i</code> matches the rendering formulation from the NeRF slides. Finally, I sum the contributions.
             </p>
 
             <h4>Training and Validation Loss and PSNR (Lego)</h4>
