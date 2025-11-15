@@ -7,6 +7,10 @@ const CS180Proj4 = () => {
   // --- Scroll spy setup ---
   const sectionDefs = useMemo(() => ([
     { id: "0",    label: <b>Part 0</b>},
+    { id: "0.1",    label: "Part 0.1"},
+    { id: "0.2",    label: "Part 0.2"},
+    { id: "0.3",    label: "Part 0.3"},
+     { id: "0.4",    label: "Part 0.4"},
     { id: "1", label: <b>Part 1</b>},
     { id: "2",    label: <b>Part 2</b>},
     { id: "2.1",    label: "Part 2.1" },
@@ -108,10 +112,26 @@ const CS180Proj4 = () => {
         <section className="section block">
           <div className='section-intro'>
             <h2 id="0">Part 0: Calibrating Your Camera and Capturing a 3D Scan</h2>
-            <p>In this section, a dataset will be created by first calibrating the phone camera and taking 30-50 images of the Aruco tags at a fixed zoom but varied viewing angles. This is achieved by detecting the Aruco tag corners using OpenCV and associating them with their respective 3D corner coordinates in the world to compute intrinsics and distortion of the phone camera using <code>cv2.calibrateCamera()</code>.</p>
-            
-            <p>Using the same camera and zoom with consistent lighting and sharpness, we capture 30-50 images of an object placed beside the same printed Aruco tags used during calibration. For each object image, we will detect the aruco tags, run <code>cv2.solvePnP()</code> with the calibrated camera intrinsics to estimate rotation and translation before inverting the result to obtain camera to world matrices. Lastly, we will undistort all images with <code>cv2.undistort()</code> and then generate the dataset split into training, validation, and test using <code>sklearn.model_selection.train_test_split()</code>. </p>
-            <p>I downsampled all images to around 200x200 resoltuion as it speeds up the model training at the later part. I also did not undistort any of my images as there is negligible difference between my original images and undistorted images. </p>
+            <div className='subsection'>
+              <h3 id="0.1">Part 0.1: Calibrating Your Camera</h3>
+              <p>In this section, a dataset will be created by first calibrating the phone camera and taking 30-50 images of the Aruco tags at a fixed zoom but varied viewing angles. This is achieved by detecting the Aruco tag corners using OpenCV and associating them with their respective 3D corner coordinates in the world to compute intrinsics and distortion of the phone camera using <code>cv2.calibrateCamera()</code>.</p>
+              <img src="/cs180proj4/aruco.jpg" alt="" />
+            </div>
+            <div className='subsection'>
+              <h3 id="0.2">Part 0.2: Capturing a 3D Object Scan</h3>
+              <p>Using the same camera and zoom with consistent lighting and sharpness, we capture 30-50 images of an object placed beside the same printed Aruco tags used during calibration. I captured a small bird toy dataset by placing the toy beside the aruco tag that I used in the previous part. I downsampled all images to around 200x200 resoltuion as it speeds up the model training at the later part. </p>
+              <img src="/cs180proj4/bird.jpg" alt="" />
+            </div>
+            <div className='subsection'>
+              <h3 id="0.3">Part 0.3: Estimating Camera Pose</h3>
+              <p>After calibrating the camera, I will use those intrinsic parameters to estimate the camera pose (position and orientation) for each image of my bird toy. For each object image, we will detect the aruco tags, run <code>cv2.solvePnP()</code> with the calibrated camera intrinsics to estimate rotation and translation before inverting the result to obtain camera to world matrices.</p>
+            </div>
+            <div className='subsection'>
+              <h3 id="0.4">Part 0.4: Undistorting images and creating a dataset</h3>
+              <p>
+                Lastly, we will undistort all images with <code>cv2.undistort()</code> and then generate the dataset split into training, validation, and test using <code>sklearn.model_selection.train_test_split()</code>. I tried both no change and undistortion for my own dataset for comparison. I ended up not undistorting any of my images as there is negligible difference between my original images and undistorted images.
+              </p>
+            </div>
             <h4>Datasets (height x width)</h4>
             <ul>
               <li><b>lego:</b> 200x200</li>
@@ -128,7 +148,7 @@ const CS180Proj4 = () => {
                   <img src="/cs180proj4/0im2c.png" alt="" className="smallimg" />
                   <figcaption>Camera frustums view 2</figcaption>
                 </figure>
-
+            
             </div>
           </div>
         </section>
@@ -144,7 +164,7 @@ const CS180Proj4 = () => {
               <li>Loss: MSE</li>
               <li>Optimizer: Adam (0.01 learning rate)</li>
               <li>Iterations: 2000</li>
-              <li>Batch Size: 10000</li>
+              <li>Batch Size: 10,000</li>
               <li>Reconstruction Quality Metric: PSNR</li>
               <li>Max Frequency L: 20</li>
              </ul>
@@ -270,7 +290,7 @@ const CS180Proj4 = () => {
              
               <li>Loss: MSE</li>
               <li>Optimizer: Adam</li>
-              <li>Batch Size: 10000</li>
+              <li>Batch Size: 10,000</li>
               <li>Reconstruction Quality Metric: PSNR</li>
               <li>Max Frequency L (3D Coordinates): 10</li>
               <li>Max Frequency L (Ray Direction): 4</li>
@@ -295,6 +315,13 @@ const CS180Proj4 = () => {
             Discrete volumetric rendering helps render a pixel from the NeRF. For every sampled point along a ray, the neural network predicts a density <code>σ</code> and color <code>rgb</code>. Firstly, I convert the outputted densities into per-interval opacities <code>α = 1 − exp(−σ Δt)</code>, where <code>Δt</code> is the step size between samples. The cumulative transmittance <code>T</code> is computed with a forward cumulative product, representing the probability that the ray has not terminated before every sample. The final pixel color is the weighted sum over all samples.
             <code>∑ T_i · α_i · color_i</code> matches the rendering formulation from the NeRF slides. Finally, I sum the contributions.
             </p>
+            <h4>Hyperparameters</h4>
+            <ul>
+              <li>Batch size: 10,000</li>
+              <li>Learning rate: 5e-4</li>
+              <li>Iterations: 2000</li>
+              <li>Loss: MSE</li>
+            </ul>
 
             <h4>Training and Validation Loss and PSNR (Lego)</h4>
             <div className="image-row">
@@ -351,10 +378,11 @@ const CS180Proj4 = () => {
             <ul>
               <li>Near = 0.02</li>
               <li>Far = 0.5</li>
+              <li>Learning rate: 5e-4</li>
               <li>Number of samples per ray = 32</li>
               <li>Model Architecture: no change </li>
             </ul>
-            <p>As training with 64 samples per ray does not give a difference in the final gif and the psnr curves from the 32 samples per ray, I used 32 samples to increase the speed of my training process. The same reasoning applied for choosing 32 samples per ray for my own dataset.</p>
+            <p>As training with 64 samples per ray does not give a difference in the final gif and the psnr curves from the 32 samples per ray, I used 32 samples to increase the speed of my training process. The same reasoning applied for choosing 32 samples per ray for my own dataset (bird).</p>
             <h4>Training and Validation Loss and PSNR (Lafufu)</h4>
             <div className="image-row">
               <figure className="image-card">
@@ -401,6 +429,7 @@ const CS180Proj4 = () => {
             <ul>
               <li>Near = 0.05</li>
               <li>Far = 0.6</li>
+              <li>Learning rate: 5e-4</li>
               <li>Number of samples per ray = 32</li>
               <li>Model Architecture: no change </li>
             </ul>
