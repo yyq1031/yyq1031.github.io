@@ -18,6 +18,7 @@ import CS180Proj1 from "./pages/cs180project1";
 import CS180Proj2 from "./pages/cs180project2";
 import CS180Proj3 from "./pages/cs180project3";
 import CS180Proj4 from "./pages/cs180project4";
+import CS180Proj5 from "./pages/cs180project5";
 
 function App() {
 	useEffect(() => {
@@ -41,6 +42,7 @@ function App() {
 				<Route path="/cs180/project2" element={<CS180Proj2 />} />
 				<Route path="/cs180/project3" element={<CS180Proj3 />} />
 				<Route path="/cs180/project4" element={<CS180Proj4 />} />
+				<Route path="/cs180/project5" element={<CS180Proj5 />} />
 				<Route path="*" element={<Notfound />} />
 			</Routes>
 		</div>

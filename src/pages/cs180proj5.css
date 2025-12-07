@@ -1,0 +1,448 @@
+html { scroll-behavior: smooth; }
+
+.cs180 {
+  position: relative;
+  color: var(--text);
+  background: linear-gradient(180deg, var(--bg), #0a0c10);
+  min-height: 100vh;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  line-height: 1.6;
+}
+
+/* --- top progress bar --- */
+.progress-wrap{
+  position: fixed; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.04));
+  z-index: 9999;
+}
+.progress-bar{
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), #86efac);
+  box-shadow: 0 0 12px var(--ring);
+  transition: width .12s ease-out;
+}
+
+/* --- sticky TOC sidebar --- */
+.toc{
+  position: fixed;
+  top: 60px;
+  left: max(12px, calc((100vw - 1200px)/2 - 220px));
+  width: 200px;
+  max-height: calc(100vh - 80px);
+  overflow: auto;
+  padding: 14px 12px;
+  background: var(--panel-2);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+  display: none; /* hidden on small screens */
+}
+@media (min-width: 1100px){
+  .toc{ display:block; }
+}
+.toc-title{
+  font-weight: 700; font-size: 13px; letter-spacing: .4px;
+  color: var(--muted); margin-bottom: 10px; text-transform: uppercase;
+}
+.toc ul{ list-style: none; padding: 0; margin: 0; }
+.toc li{ margin: 6px 0; }
+.toc a{
+  display: block; padding: 6px 10px; border-radius: 8px;
+  text-decoration: none; color: var(--text); font-size: 14px;
+  border: 1px solid transparent;
+}
+.toc a:hover{ background: rgba(255,255,255,.04); }
+.toc a.active{
+  background: color-mix(in oklab, var(--primary) 18%, transparent);
+  border-color: color-mix(in oklab, var(--primary) 32%, transparent);
+}
+
+/* --- page header --- */
+.page-header{
+  padding: 64px 0 8px;
+}
+.page-header h1{
+  font-size: clamp(28px, 3.2vw, 44px);
+  margin: 0 0 6px;
+}
+.page-header h2{
+  font-size: clamp(16px, 2vw, 20px);
+  color: var(--muted);
+  margin: 0;
+}
+
+/* --- main container --- */
+.hero{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* --- blocks/sections --- */
+.block{
+  background: var(--panel-2);
+  padding: 22px 24px 28px;
+  margin: 18px 0 28px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(255,255,255,.06);
+}
+.section h2{
+  margin: 0 0 10px;
+  letter-spacing: .3px;
+  text-align: left;
+}
+.subsection{
+  margin: 24px 0 28px;
+  padding: 22px 22px 24px;
+  border: 1px dashed rgba(255,255,255,.08);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,.02), transparent);
+}
+.subsection h3{
+  margin: 0 0 8px;
+  position: relative; 
+}
+.subsection h3::before{
+  content:""; position:absolute; left:0; top:4px; bottom:4px; width:4px;
+  border-radius:4px; background: linear-gradient(180deg, var(--primary), transparent);
+}
+
+/* --- overview pill --- */
+.overview-text p{
+  background: var(--panel);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin: 16px 0 0;
+  border: 1px solid rgba(255,255,255,.06);
+}
+
+/* --- image grids reuse your styles with small refinements --- */
+.photo-row{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+  margin-top: 14px;
+}
+.card{
+  background: var(--panel);
+  border-radius: calc(var(--radius) - 4px);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,.06);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 28px rgba(0,0,0,.35);
+  border-color: var(--ring);
+}
+.thumb{ aspect-ratio: 4 / 3; display:grid; place-items:center; background:#0f1318; }
+.thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+.meta{ padding: 12px 14px 16px; }
+.filename{ margin: 0 0 8px; font-weight: 600; letter-spacing: .2px; }
+.chips{ display:flex; flex-wrap:wrap; gap:8px; }
+.chip{
+  display:inline-flex; align-items:center; gap:6px; font-size:13px;
+  padding:6px 10px; border-radius:999px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+}
+.chip--green{
+  background: color-mix(in oklab, var(--green) 18%, transparent);
+  border-color: color-mix(in oklab, var(--green) 30%, transparent);
+}
+.chip--red{
+  background: color-mix(in oklab, var(--red) 18%, transparent);
+  border-color: color-mix(in oklab, var(--red) 30%, transparent);
+}
+
+/* math spacing */
+.math{ margin: 16px 0 24px; }
+
+.three-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 per row */
+  gap: 24px;
+  justify-items: center; /* center each figure in its cell */
+}
+
+.three-row .image-card {
+  width: 220px;               /* or 240/260/280 as you like */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.three-row .image-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* --- generic N-per-row helpers --- */
+.three-row,
+.four-row,
+.five-row {
+  display: grid;
+  gap: 24px;
+  justify-items: center;       /* center each figure in its cell */
+}
+
+/* 3 per row */
+.three-row {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* 4 per row */
+.four-row {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* 5 per row */
+.five-row {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+/* card styling reused for all of them */
+.three-row .image-card,
+.four-row .image-card,
+.five-row .image-card {
+  width: 220px;                /* tweak 220–280px to taste */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.three-row .image-card img,
+.four-row .image-card img,
+.five-row .image-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* --- generic N-per-row helpers (continued) --- */
+
+/* 6 per row */
+.six-row {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 24px;
+  justify-items: center;
+}
+
+/* 7 per row */
+.seven-row {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 24px;
+  justify-items: center;
+}
+
+/* card styling reused for all row types */
+.six-row .image-card,
+.seven-row .image-card {
+  width: 220px; /* adjust 220–280px depending on how large you want each card */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.six-row .image-card img,
+.seven-row .image-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* responsive collapse for narrow screens */
+@media (max-width: 900px) {
+  .six-row,
+  .seven-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .six-row,
+  .seven-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* responsive: collapse on smaller screens */
+@media (max-width: 900px) {
+  .three-row,
+  .four-row,
+  .five-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .three-row,
+  .four-row,
+  .five-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.image-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.image-card {
+  flex: 1 1 320px;
+  max-width: 100%;
+  /* center contents */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* make sure the image itself is centered and not stretching weirdly */
+.image-card img,
+.image-card .smallimg {
+  width: 100%;
+  max-width: 280px;   /* or whatever size you like */
+  height: auto;
+  display: block;
+  margin: 0 auto;     /* center inside the card */
+  border-radius: 8px;
+}
+
+/* caption centered inside the card */
+.image-card figcaption {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+  width: 100%;
+}
+
+.mediumimg {
+  max-width: 500px;
+}
+
+.bigimg {
+  max-width: 1000px;
+  margin-inline: auto;
+}
+
+.image-card figcaption {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* smaller version of images ONLY for this row */
+.smallimg {
+  width: 100%;
+  max-width: 280px;     /* ↓ reduced from 400px */
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+/* Even smaller on phones */
+@media (max-width: 600px) {
+  .smallimg {
+    max-width: 220px;
+  }
+}
+
+
+@media (max-width: 900px) {
+  .image-sets { grid-template-columns: 1fr; } /* stack sets on small screens */
+}
+
+
+
+/* Optional: small title per row (e.g., “Outlet”, “Wardrobe”) */
+.set-title {
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+
+/* Originals (row 1) */
+.orig {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.orig img {
+  width: 100%;
+  height: auto;           /* keep natural ratio */
+  display: block;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+
+figcaption {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #333;
+  margin-top: 8px;
+}
+/* --- clean two-row layout --- */
+.two-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  justify-items: center;
+  margin: 20px 0;
+}
+
+/* --- clean two-row layout (bigger images) --- */
+.two-row .image-card {
+  width: 480px;   /* increased from 260px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.two-row .twoimg {
+  width: 100%;
+  max-width: 480px;  /* larger image */
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+}
+
+
+/* captions */
+.two-row figcaption {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* responsive stacking */
+@media (max-width: 700px) {
+  .two-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
+
+
+
