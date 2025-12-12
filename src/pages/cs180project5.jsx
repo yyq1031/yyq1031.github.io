@@ -1031,16 +1031,19 @@ const CS180Proj5 = () => {
         <section className="section block">
           <div className='section-intro'>
             <h2 id="B1.1">1.1: Training a Single-Step Denoising UNet</h2>
-            <p>The denoiser is implemeted with a UNet.</p>
-            <img src="/cs180proj5/b/1.1_unconditional.png" alt="" className="mediumimg" />
-            <img src="/cs180proj5/b/1.1_standard.png" alt="" className="mediumimg" />
+            <p>The denoiser is implemeted with a UNet (unconditional) with the following model architecture. This model takes in a noisy input image (shape: 1x28x28) and output a denoised image (shape: 1x28x28) that has a digit like those in the MNIST dataset.</p>
+            <img src="/cs180proj5/b/1.1_unconditional.png" alt="" className="bigimg" />
+            <img src="/cs180proj5/b/1.1_standard.png" alt="" className="bigimg" />
           </div>
         </section>
 
         <section className="section block">
           <div className='section-intro'>
             <h2>1.2: Using the UNet to Train a Denoiser</h2>
-            <p>A visualization of the noising process:</p>
+            <p>We want to learn a denoiser that maps a noisy MNIST digit back to its clean version by minimizing the L2 loss. We will start from clean images and then add noise to these clean images using the following noising process with different noise value σ.</p>
+            <img src="/cs180proj5/b/1.2_formula.png" alt="" className="smallimg" />
+            
+            <p>A visualization of the noising process with σ = [0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0]:</p>
             <img src="/cs180proj5/b/1.2_noisy_minist_with_titles.jpg" alt="" className="bigimg" />
           </div>
         </section>
@@ -1057,6 +1060,8 @@ const CS180Proj5 = () => {
                 <li>epochs: 5</li>
                 <li>hidden dimension: D = 128</li>
                 <li>learning rate: 1e-4</li>
+                <li>Loss: L2</li>
+                 <img src="/cs180proj5/b/1.2_l2loss.png" alt="" className="smallimg" />
             </ul>
             <h4>Training Loss Curve</h4>
             <div className="two-row">
@@ -1105,6 +1110,7 @@ const CS180Proj5 = () => {
                     <figcaption>sample3_epoch5</figcaption>
                 </figure>
             </div>
+            <p>The model works very well and the samples at both epoch 1 and epoch 5 look very clear.</p>
     
           </div>
         </section>
@@ -1112,6 +1118,7 @@ const CS180Proj5 = () => {
         <section className="section block">
           <div className='section-intro'>
             <h2>1.2.2: Out-of-Distribution Testing</h2>
+            <p>Now we look at the denoiser output when different noise levels are applied to the clean input images.</p>
             <img src="/cs180proj5/b/1.2.2_Out-of-Distribution_Testing_sigma_0.0.jpg" alt="" className="bigimg" />
             <img src="/cs180proj5/b/1.2.2_Out-of-Distribution_Testing_sigma_0.2.jpg" alt="" className="bigimg" />
             <img src="/cs180proj5/b/1.2.2_Out-of-Distribution_Testing_sigma_0.4.jpg" alt="" className="bigimg" />
@@ -1119,12 +1126,14 @@ const CS180Proj5 = () => {
             <img src="/cs180proj5/b/1.2.2_Out-of-Distribution_Testing_sigma_0.6.jpg" alt="" className="bigimg" />
             <img src="/cs180proj5/b/1.2.2_Out-of-Distribution_Testing_sigma_0.8.jpg" alt="" className="bigimg" />
             <img src="/cs180proj5/b/1.2.2_Out-of-Distribution_Testing_sigma_1.0.jpg" alt="" className="bigimg" />
+            <p>It is expected that as the noise level increases, the denoiser will output digits that have less distinct structures with blurry outlines.</p>
           </div>
         </section>
         
          <section className="section block">
           <div className='section-intro'>
             <h2>1.2.3 Denoising Pure Noise</h2>
+            <p>We will train the denoiser using pure Gaussian noise as input images so the model learns to map noise directly to MNIST digits.</p>
             <h4>Training Loss Curve</h4>
             <div className="two-row">
                 <figure className="image-card">
@@ -1147,22 +1156,32 @@ const CS180Proj5 = () => {
                 </figure>
             </div>
             <h4>Observed Patterns</h4>
-            <p>The denoiser trained on pure noise learns to output blurry, faint digit-like structures but without any clear digit patterns. This happens because the training pairs map random noise to real MNIST digits and the network only minimizes MSE by learning the average structure of the dataset rather than reconstructing a specific digit. Consequently, the outputs will look like smoothed mixtures of digits 0-9 with very faint vertical strokes and curves rather than clean reconstructions. The model only captures the global statistics of MNIST and does not act like a true denoiser that can denoise to output clear digits.</p>
+            <p>As the number of epochs increases, the predicted output digit looks clearer. The denoiser trained on pure noise learns to output blurry, faint digit-like structures but without any clear digit patterns. This happens because the training pairs map random noise to real MNIST digits and the network only minimizes MSE by learning the average structure of the dataset rather than reconstructing a specific digit. Consequently, the outputs will look like smoothed out mixtures of digits 0-9 with very faint loops and curves rather than clean reconstructions. The model only captures the global statistics of MNIST datasets and does not act like a true denoiser that can denoise to output clear digits.</p>
+          </div>
+        </section>
+
+         <section className="section block">
+          <div className='section-intro'>
+            <h2>Part 2: Training a Flow Matching Model</h2>
+            <p>We will do iterative denoising using flow matching, where the model learns the velocity field that moves a noisy sample image towards a clean image over a continuous time parameter t. We do so by generating intermediate samples by linearly interpolating between pure noise x<sub>0</sub> and clean data x<sub>1</sub> to get x<sub>t</sub>, then we will compute the true flow that is the derivative of this interpolation with respect to time. The UNet is trained to approximate this flow field in order for us to iteratively update a noisy image along the flow towards the clean data distribution.</p>
           </div>
         </section>
 
         <section className="section block">
           <div className='section-intro'>
             <h2>2.1: Adding Time Conditioning to UNet</h2>
-           <img src="/cs180proj5/b/2.1_unconditional.png" alt="" className="mediumimg" />
-            <img src="/cs180proj5/b/2.1fcb.png" alt="" className="mediumimg" />
-            
+            <p>With almost the same model architecture, we will now inject a scalar t through 2 FCB blocks into the UNet.</p>
+           <img src="/cs180proj5/b/2.1_unconditional.png" alt="" className="bigimg" />
+            <img src="/cs180proj5/b/2.1fcb.png" alt="" className="bigimg" />
           </div>
         </section>
 
          <section className="section block">
           <div className='section-intro'>
             <h2>2.2: Training the UNet</h2>
+            <p>We want the UNet to predict the flow that moves a noisy image towards a clean image. At each step, the UNet samples a clean image x<sub>1</sub>, a noisy image x<sub>0</sub>, and an interpolated image x<sub>t</sub>. We then update the model by minimizing the L2 loss between the true flow and the model's predicted flow.</p>
+            <p>We use the following algorithm:</p>
+            <img src="/cs180proj5/b/2.2algo.png" alt="" className="mediumimg" />
             <ul>
                 <li>noise level = 0.5</li>
                 <li>dataset: torchvision.datasets.MNIST</li>
@@ -1172,6 +1191,8 @@ const CS180Proj5 = () => {
                 <li>hidden dimension: D = 64</li>
                 <li>learning rate: 1e-4</li>
                 <li>scheduler gamme: 0.1 ** (1.0 / num_epochs)</li>
+                <li>Loss:</li>
+                <img src="/cs180proj5/b/2_l2loss.png" alt="" className="mediumimg" />
             </ul>
             <h4>Training Loss Curve</h4>
             <div className="two-row">
@@ -1188,34 +1209,48 @@ const CS180Proj5 = () => {
         <section className="section block">
           <div className='section-intro'>
             <h2>2.3: Sampling from the UNet</h2>
+            <p>We use the following algorithm to do sampling:</p>
+            <img src="/cs180proj5/b/2.3_algo.png" alt="" className="mediumimg" />
             <h4>Epoch 1</h4>
            <img src="/cs180proj5/b/2.3_x_epoch1.jpg" alt="" className="mediumimg" />
            <h4>Epoch 5</h4>
            <img src="/cs180proj5/b/2.3_x_epoch5.jpg" alt="" className="mediumimg" />
            <h4>Epoch 10</h4>
            <img src="/cs180proj5/b/2.3_x_epoch10.jpg" alt="" className="mediumimg" />
-            
+            <p>As number of epochs increases, the predicted digits look clearer and more structurelly distinct. However, it is still hard to tell what digits they are in the final samples at epoch 5.</p>
           </div>
         </section>
 
          <section className="section block">
           <div className='section-intro'>
             <h2>2.4: Adding Class-Conditioning to UNet</h2>
-           <p>To enable class-controlled generation, the UNet will need to be additionally conditioned on a one-hot class vector for digits 0-9. This is doen by adding 2 extra FCBlocks into the UNet's intermediate features in a way similar to how time conditioning is added. To ensure the model still works without explicit class inputs—enabling classifier-free guidance, the class vector is randomly dropped by setting to zero for 10% of the time during training.</p>
+           <p>We want to have more class-controlled generation, so the UNet will need to be additionally conditioned on a one-hot class vector for digits 0-9 on top of the time embedding. This is doen by adding 2 extra FCBlocks into the UNet's intermediate features in a way similar to how time conditioning is added. To ensure the model still works without class conditioning and allow for classifier-free guidance, the class vector is randomly dropped by setting it to zero for 10% of the time during training.</p>
           </div>
         </section>
 
          <section className="section block">
           <div className='section-intro'>
             <h2>2.5: Training the UNet</h2>
+            <p>We use the following algorithm for training (similar to before but with slight modifications):</p>
+            <img src="/cs180proj5/b/2.5_algo.png" alt="" className="mediumimg" />
            <h4>Training Loss Curve</h4>
-           <img src="/cs180proj5/b/2.5_class_cunet_training_loss.jpg" alt="" className="mediumimg" />
+           <div className="two-row">
+            <img src="/cs180proj5/b/2.5_class_cunet_training_loss.jpg" alt="" className="mediumimg" />
+            <img src="/cs180proj5/b/2.5_class_cunet_training_loss_iter.jpg" alt="" className="mediumimg" />
+           </div>
+           
           </div>
         </section>
 
         <section className="section block">
           <div className='section-intro'>
             <h2>2.6: Sampling from the UNet</h2>
+            <h3>Parameters</h3>
+            <ul>
+              <li>γ = 5.0</li>
+            </ul>
+            <p>We use the following algorithm for sampling:</p>
+            <img src="/cs180proj5/b/2.6_algo.png" alt="" className="mediumimg" />
             <h3>With scheduler</h3>
             <h4>Epoch 1</h4>
             <img src="/cs180proj5/b/2.6_x_epoch1.jpg" alt="" className="mediumimg" />
@@ -1224,12 +1259,15 @@ const CS180Proj5 = () => {
             <h4>Epoch 10</h4>
             <img src="/cs180proj5/b/2.6_x_epoch10.jpg" alt="" className="mediumimg" />
             <h3>No scheduler</h3>
+            <h4>Epoch 1</h4>
             <img src="/cs180proj5/b/2.6_x_epoch1_no_scheduler.jpg" alt="" className="mediumimg" />
             <h4>Epoch 5</h4>
             <img src="/cs180proj5/b/2.6_x_epoch5_no_scheduler.jpg" alt="" className="mediumimg" />
             <h4>Epoch 10</h4>
             <img src="/cs180proj5/b/2.6_x_epoch10_no_scheduler.jpg" alt="" className="mediumimg" />
-            <p>I did not do anything extra to compensate the removal of the learning rate scheduler. The outputs still look very good even without the scheduler.</p>
+            <p>I did not do anything extra to compensate the removal of the learning rate scheduler and the final output still look very good without the scheduler. However, throughout all epochs, the digits for no scheduler tend to look slightly thicker in their strokes than those digits with scheduler.</p>
+
+            <p>The learning rate scheduler is used to make sure early training has a high learning rate and later training iterations have a lower learning rate to avoid big oscillations during gradient descent. The model should hence converge to cleaner digits with a scheduler. But for my outputs, there is no distict quality difference. It may be because the task of predicting digits is not very complex and the original learning rate is not extremely high that can cause oscillations during gradient descent.</p>
           </div>
         </section>
        
