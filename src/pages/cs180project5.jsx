@@ -196,7 +196,9 @@ const CS180Proj5 = () => {
          <section className="section block">
           <div className='section-intro'>
             <h2 id="A1.1">1.1: Implementing the Forward Process</h2>
-            <p>Diffusion models generate images by reversing a gradual noising process. We start with a clean image and repeatedly add noise until the image becomes almost pure Gaussian noise at a large timestep T. A diffusion model learns to denoise—given a noisy image x<sub>t</sub>  and the timestep t, it predicts the noise inside the image. During sampling, we begin from random noise x<sub>T</sub> and iteratively remove predicted noise using the model's outputs and predefined noise coefficients α<sub>t</sub>, eventually reaching a clean generated image x<sub>0</sub>. DeepFloyd follows this  chosen during training.</p>
+            <p>Diffusion models generate images by reversing a gradual noising process. We start with a clean image and repeatedly add noise until the image becomes almost pure Gaussian noise at a large timestep t. A diffusion model learns to denoise. Given a noisy image x<sub>t</sub> and the timestep t, it predicts the noise inside the image. During sampling, we begin from random noise x<sub>t</sub> and iteratively remove predicted noise using the model's outputs and predefined noise coefficients, eventually reaching a clean generated image x<sub>0</sub>. DeepFloyd follows this during training.</p>
+             <img src="/cs180proj5/a1.1/forward.png" alt="" className="smallimg" />
+            <p>When t increases, there is more noise added to the image of the campanile.</p>
             <div className="image-row">
                 <figure className="image-card">
                   <img src="/cs180proj5/a1.1/campanile_noise0.png" alt="" className="smallimg" />
@@ -204,15 +206,15 @@ const CS180Proj5 = () => {
                 </figure>
                 <figure className="image-card">
                   <img src="/cs180proj5/a1.1/campanile_noise250.png" alt="" className="smallimg" />
-                  <figcaption>campanile_noise250</figcaption>
+                  <figcaption>campanile_t=250</figcaption>
                 </figure>
                  <figure className="image-card">
                   <img src="/cs180proj5/a1.1/campanile_noise500.png" alt="" className="smallimg" />
-                  <figcaption>campanile_noise500</figcaption>
+                  <figcaption>campanile_t=500</figcaption>
                 </figure>
                  <figure className="image-card">
                   <img src="/cs180proj5/a1.1/campanile_noise750.png" alt="" className="smallimg" />
-                  <figcaption>campanile_noise750</figcaption>
+                  <figcaption>campanile_t=750</figcaption>
                 </figure>
             </div>
           </div>
@@ -221,6 +223,8 @@ const CS180Proj5 = () => {
         <section className="section block">
           <div className='section-intro'>
             <h2 id="A1.2">1.2: Classical Denoising</h2>
+            <h5>Timesteps = [250, 500, 750]</h5>
+            <p>This step we work with classical denoising using Gaussian blur filtering with <code>torchvision.transforms.functional.gaussian_blur</code> to remove the noise, which does not produce a very nice denoised results. This is because gaussian blur works by averaging pixel values inside a local kernel, which smooths out high-frequency noise. As it only does local smoothing within the kernel, it cannot truly recover the original campanile structure. As noise increases at larger timesteps t, gaussian blur produces very smooth but blurry images of the campanile that lose important details.</p>
             <div className="image-row">
                 <figure className="image-card">
                   <img src="/cs180proj5/a1.1/campanile_noise250.png" alt="" className="smallimg" />
@@ -257,6 +261,8 @@ const CS180Proj5 = () => {
         <section className="section block">
           <div className='section-intro'>
             <h2 id="A1.3">1.3: One-Step Denoising</h2>
+            <p>In this step, we use a pretrained diffusion model for denoising. We take our noisy campanile images at timesteps t = 250, 500, 750 and then pass them through stage_1.unet that has learned to predict the Gaussian noise, and then remove this predicted noise from the images. The UNet is conditioned on both the timestep and a text embedding so we used the prompt “a high quality photo”, allowing it to reconstruct images that are much closer to the original than simple Gaussian blur.</p>
+            <p>However, the images that have their noise removed all look very blurry especially when timestep t increases. This is because one-step denoising will cause the sample x<sub>0</sub> to converge to the average of the population instead of one specific data point.</p>
                 <div className="three-row">
                    <figure className="image-card">
                         <img src="/cs180proj5/a1.1/campanile_noise0.png" alt="" className="smallimg" />
@@ -311,6 +317,15 @@ const CS180Proj5 = () => {
         <section className="section block">
           <div className='section-intro'>
             <h2 id="A1.4">1.4: Iterative Denoising</h2>
+            <p>We implement iterative denoising in this part, where the diffusion model will gradually remove noise by stepping through a set of timesteps from 990 to 0 with a stride of 30 instead of running all 1000 steps. At each step, the UNet predicts both the cleaner image component and the noise component, so that we can update the image using the given formula and progressively recover the campanile. </p>
+             <img src="/cs180proj5/a1.4/formula.png" alt="" className="smallimg" />
+            <p>Compared to one-step denoising or Gaussian blur, this approach produces a much cleaner and more realistic reconstruction even when starting from heavily noised images. This is because we are trying to iteratively push x<sub>0</sub> closer to one spcific data point in the entire population as illustrated in discussion, which also makes the result from iterative denoising less blurry.</p>
+            <h5>Parameters</h5>
+            <ul>
+              <li>i_start = 10</li>
+            </ul>
+
+            <p>Below is the noisy campanile at every 5th loop of denoising:</p>
             <div className="five-row">
                  <figure className="image-card">
                     <img src="/cs180proj5/a1.4/690.png" alt="" className="smallimg" />
@@ -337,6 +352,8 @@ const CS180Proj5 = () => {
                     <figcaption>90</figcaption>
                 </figure>
             </div>
+
+            <p>Final output:</p>
 
             <div className="four-row">
                 <figure className="image-card">
@@ -366,6 +383,12 @@ const CS180Proj5 = () => {
          <section className="section block">
           <div className='section-intro'>
             <h2 id="A1.5">1.5 Diffusion Model Sampling</h2>
+            <p>Now we use the diffusion model to denoise an image. We will iteratively denoise pure noise and generate images from scratch. </p>
+            <h5>Prompt and Parameters</h5>
+            <ul>
+              <li>prompt: "a high quality photo"</li>
+              <li>i_start = 0</li>
+            </ul>
             <div className="five-row">
                 <figure className="image-card">
                     <img src="/cs180proj5/a1.5/sample_0.png" alt="" className="smallimg" />
@@ -398,9 +421,13 @@ const CS180Proj5 = () => {
          <section className="section block">
           <div className='section-intro'>
             <h2 id="A1.6">1.6: Classifier-Free Guidance (CFG)</h2>
+            <p>We will improve image quality using Classifier-Free Guidance, where the UNet predicts two noise estimates (one being conditioned on a text prompt and one being unconditional). By combining them with a guidance scale = 7 , we can amplify the influence of the prompt to produce sharper, more realistic images than what are produced in the previous part. The iterative denoising process will now use both predictions, giving a much higher quality image generations compared to unguided and one-step denoising.</p>
+            <p>The noise that we use follow the below formula:</p>
+            <img src="/cs180proj5/a1.6/formula.png" alt="" className="smallimg" />
             <h4>Prompts and Parameters</h4>
             <ul>
-                <li>prompt: "a high quality photo"</li>
+                <li>prompt (conditional): "a high quality photo"</li>
+                <li>prompt (unconditional): ""</li>
                 <li>scale = 7</li>
             </ul>
              <div className="five-row">
@@ -435,9 +462,10 @@ const CS180Proj5 = () => {
          <section className="section block">
           <div className='section-intro'>
             <h2 id="A1.7">1.7: Image-to-image Translation</h2>
+            <p>We will noise the original campanile image lightly and then iteratively denoise it using CFG as demonstarted in the previous parts to project it back onto the natural image manifold. Different starting noise levels (1, 3, 5, 7, 10, 20) can produce different edits. Applying the same procedure shows noising and CFG denoising can generate smooth and realistic edits while also preserving the overall structure of the input images.</p>
              <h4>Prompts and Parameters</h4>
             <ul>
-                <li>prompt: "a high quality photo"</li>
+                <li>prompt (conditional): "a high quality photo"</li>
                 <li>scale = 7</li>
             </ul>
             <h4>Campanile</h4>
@@ -551,6 +579,7 @@ const CS180Proj5 = () => {
                     <figcaption>pumpkin_i_start=20</figcaption>
                 </figure>
             </div>
+            <p>From the outputs, we can see that the more noise we add, the larger the edit there will be to the output images. When the edits are greater, the model produces creative images that may not look like the original input images. However, when the noise added is little, it will produce edits that have structures that are very similar to the  original input images.</p>
             
           </div>
         </section>
@@ -558,6 +587,7 @@ const CS180Proj5 = () => {
          <section className="section block">
           <div className='section-intro'>
             <h2>1.7.1: Editing Hand-Drawn and Web Images</h2>
+            <p>This section is to show the same procedure works particularly well if we start with a nonrealistic image and project it onto the natural image manifold.</p>
             <h4>Web Image (Avocado)</h4>
             <div className="seven-row">
                 <figure className="image-card">
@@ -713,6 +743,9 @@ const CS180Proj5 = () => {
          <section className="section block">
           <div className='section-intro'>
             <h2>1.7.2: Inpainting</h2>
+            <p>We will use the same iterative CFG denoising procedure to perform inpainting of input images, where a binary mask indicates which regions should be regenerated and which regions should remain unchanged. During each denoising step, the model updates the entire image, but we force the unmasked region to look like the original input image to ensure that only the masked area is filled in. Using this method, we will inpaint the top of the campanile and apply the same technique using custom masks to produce edits on other images.</p>
+            <p>The equation:</p>
+            <img src="/cs180proj5/a1.7.2/formula.png" alt="" className="smallimg" />
             <h4>Campanile</h4>
             <div className="four-row">
                 <figure className="image-card">
@@ -788,6 +821,7 @@ const CS180Proj5 = () => {
         <section className="section block">
           <div className='section-intro'>
             <h2>1.7.3: Text-Conditional Image-to-image Translation</h2>
+            <p>We use the same method with text prompts so that we can guide the projection with a text prompt by adding control using language.</p>
             <h4>Campanile</h4>
             <ul>
                 <li>prompt: "a rocket ship"</li>
@@ -916,6 +950,9 @@ const CS180Proj5 = () => {
          <section className="section block">
           <div className='section-intro'>
             <h2 id="A1.8">1.8: Visual Anagrams</h2>
+            <p>In this part, we want to use diffusion model to create optical illusions that look like one image upright and a different image upside down. At each denoising step, we will first denoise the current image with prompt 1, flip the image vertically and denoise with prompt 2, then flip that result back and average the two noise estimates before applying the update. By repeating this process over many timesteps, the model learns produce a single image that satisfies prompt 1 in one orientation and prompt 2 when flipped to produce visual anagrams.</p>
+            <p>Noise estimate is calculated as follows:</p>
+            <img src="/cs180proj5/a1.8/formula.png" alt="" className="smallimg" />
             <h4>Sample Anagram</h4>
             <ul>
                 <li>prompt 1: "an oil painting of an old man"</li>
@@ -943,6 +980,9 @@ const CS180Proj5 = () => {
          <section className="section block">
           <div className='section-intro'>
             <h2 id="A1.9">1.9: Hybrid Images</h2>
+            <p>We will merge the low-frequency content from one prompt with the high frequency details from another prompt. At each denoising step, we generate two noise estimates (one being conditioned on prompt 1 and one being conditioned on prompt 2). We apply a Gaussian blur (low pass filter) to extract low frequencies from the first image and a high pass filter to extract high frequency details from the second image, then combine them into a composite noise estimate used for the update. Repeating this process produces hybrid images.</p>
+            <p>Noise estimate is calculated as follows:</p>
+            <img src="/cs180proj5/a1.9/formula.png" alt="" className="smallimg" />
             <h4>Sample Hybrid</h4>
             <ul>
                 <li>prompt 1: "a lithograph of a skull"</li>
@@ -1019,7 +1059,16 @@ const CS180Proj5 = () => {
                 <li>learning rate: 1e-4</li>
             </ul>
             <h4>Training Loss Curve</h4>
-            <img src="/cs180proj5/b/1.2.1_training_loss.jpg" alt="" className="mediumimg" />
+            <div className="two-row">
+              <figure className="image-card">
+                <img src="/cs180proj5/b/1.2.1_training_loss.jpg" alt="" className="mediumimg" />
+              </figure>
+
+              <figure className="image-card">
+                <img src="/cs180proj5/b/1.2.1_training_loss_iter.jpg" alt="" className="mediumimg" />
+              </figure>
+            </div>
+
             <h4>Samples</h4>
             <div className="two-row">
                 <figure className="image-card">
@@ -1070,7 +1119,6 @@ const CS180Proj5 = () => {
             <img src="/cs180proj5/b/1.2.2_Out-of-Distribution_Testing_sigma_0.6.jpg" alt="" className="bigimg" />
             <img src="/cs180proj5/b/1.2.2_Out-of-Distribution_Testing_sigma_0.8.jpg" alt="" className="bigimg" />
             <img src="/cs180proj5/b/1.2.2_Out-of-Distribution_Testing_sigma_1.0.jpg" alt="" className="bigimg" />
-            
           </div>
         </section>
         
@@ -1078,7 +1126,14 @@ const CS180Proj5 = () => {
           <div className='section-intro'>
             <h2>1.2.3 Denoising Pure Noise</h2>
             <h4>Training Loss Curve</h4>
-            <img src="/cs180proj5/b/1.2.3_pure_noise_training_loss.jpg" alt="" className="mediumimg" />
+            <div className="two-row">
+                <figure className="image-card">
+                  <img src="/cs180proj5/b/1.2.3_pure_noise_training_loss.jpg" alt="" className="mediumimg" />
+                </figure>
+                <figure className="image-card">
+                  <img src="/cs180proj5/b/1.2.3_pure_noise_training_loss_iter.jpg" alt="" className="mediumimg" /> 
+                </figure>
+            </div>
             <h4>Samples</h4>
             <div className="two-row">
                 <figure className="image-card">
@@ -1119,7 +1174,14 @@ const CS180Proj5 = () => {
                 <li>scheduler gamme: 0.1 ** (1.0 / num_epochs)</li>
             </ul>
             <h4>Training Loss Curve</h4>
-           <img src="/cs180proj5/b/2.2_tcunet_training_loss.jpg" alt="" className="mediumimg" />
+            <div className="two-row">
+              <figure className="image-card">
+                  <img src="/cs180proj5/b/2.2_tcunet_training_loss.jpg" alt="" className="mediumimg" />
+                </figure>
+                <figure className="image-card">
+                  <img src="/cs180proj5/b/2.2_tcunet_training_loss_iter.jpg" alt="" className="mediumimg" />
+              </figure>
+            </div>
           </div>
         </section>
 
