@@ -6,31 +6,29 @@ const CS180Proj5 = () => {
 
   // --- Scroll spy setup ---
   const sectionDefs = useMemo(() => ([
-    { id: "A",    label: <b>A</b>},
-    { id: "A0",    label: <b>A: Part 0</b>},
-    { id: "A1",    label: <b>A: Part 1</b>},
-    // { id: "A1.1",    label: "A1.1"},
-    // { id: "A1.2",    label: "A1.2"},
-    // { id: "A1.3",    label: "A1.3"},
-    // { id: "A1.4",    label: "A1.4"},
-    // { id: "A1.5",    label: "A1.5"},
-    // { id: "A1.6",    label: "A1.6"},
-    // { id: "A1.7",    label: "A1.7"},
-    // { id: "A1.8",    label: "A1.8"},
-    // { id: "A1.9",    label: "A1.9"},
-    { id: "B",    label: <b>B</b>},
-    { id: "B1",    label: <b>B: Part 1</b>},
-    // { id: "B1.1",    label: "B1.1"},
-    // { id: "B1.2",    label: "B1.2"},
-    // { id: "B1.2.1",    label: "B1.2.1"},
-    // { id: "B1.2.2",    label: "B1.2.2"},
-    // { id: "B1.2.3",    label: "B1.2.3"},
-    // { id: "B1.2.4",    label: "B1.2.4"},
-    { id: "B2",    label: <b>B: Part 2</b>},
-    // { id: "B2.1",    label: "B2.1"},
-    // { id: "B2.2",    label: "B2.2"},
-    // { id: "B2.3",    label: "B2.3"},
-    // { id: "B2.4",    label: "B2.4"},
+    { id: "A",    label: <b>A: Diffusion Models</b>},
+    { id: "A0",    label: "0: Setup"},
+    { id: "A1",    label: "1: Sampling Loops"},
+    { id: "A1.1",    label: "Implementing the Forward Process"},
+    { id: "A1.2",    label: "Classical Denoising"},
+    { id: "A1.3",    label: "One-Step Denoising"},
+    { id: "A1.4",    label: "Iterative Denoising"},
+    { id: "A1.5",    label: "Diffusion Model Sampling"},
+    { id: "A1.6",    label: "Classifier-Free Guidance"},
+    { id: "A1.7",    label: "Image-to-image Translation"},
+    { id: "A1.8",    label: "Visual Anagrams"},
+    { id: "A1.9",    label: "Hybrid Images"},
+    { id: "B",    label: <b>B: Flow Matching</b>},
+    { id: "B1",    label: "1: Training a Single-Step Denoising UNet"},
+    { id: "B1.1",    label: "Implementing the UNet"},
+    { id: "B1.2",    label: "Using the UNet to Train a Denoiser"},
+    { id: "B2",    label: "2: Training a Flow Matching Model"},
+    { id: "B2.1",    label: "Adding Time Conditioning to UNet"},
+    { id: "B2.2",    label: "Training the UNet"},
+    { id: "B2.3",    label: "Sampling from the UNet"},
+    { id: "B2.4",    label: "Adding Class-Conditioning to UNet"},
+    { id: "B2.5",    label: "Training the UNet"},
+    { id: "B2.6",    label: "Sampling from the UNet"},
   ]), []);
 
   const [active, setActive] = useState(sectionDefs[0].id);
@@ -1030,7 +1028,7 @@ const CS180Proj5 = () => {
 
         <section className="section block">
           <div className='section-intro'>
-            <h2 id="B1.1">1.1: Training a Single-Step Denoising UNet</h2>
+            <h2 id="B1.1">1.1: Implementing the UNet</h2>
             <p>The denoiser is implemeted with a UNet (unconditional) with the following model architecture. This model takes in a noisy input image (shape: 1x28x28) and output a denoised image (shape: 1x28x28) that has a digit like those in the MNIST dataset.</p>
             <img src="/cs180proj5/b/1.1_unconditional.png" alt="" className="bigimg" />
             <img src="/cs180proj5/b/1.1_standard.png" alt="" className="bigimg" />
@@ -1039,7 +1037,7 @@ const CS180Proj5 = () => {
 
         <section className="section block">
           <div className='section-intro'>
-            <h2>1.2: Using the UNet to Train a Denoiser</h2>
+            <h2 id="B1.2">1.2: Using the UNet to Train a Denoiser</h2>
             <p>We want to learn a denoiser that maps a noisy MNIST digit back to its clean version by minimizing the L2 loss. We will start from clean images and then add noise to these clean images using the following noising process with different noise value σ.</p>
             <img src="/cs180proj5/b/1.2_formula.png" alt="" className="smallimg" />
             
@@ -1162,14 +1160,14 @@ const CS180Proj5 = () => {
 
          <section className="section block">
           <div className='section-intro'>
-            <h2>Part 2: Training a Flow Matching Model</h2>
+            <h2 id="B2">Part 2: Training a Flow Matching Model</h2>
             <p>We will do iterative denoising using flow matching, where the model learns the velocity field that moves a noisy sample image towards a clean image over a continuous time parameter t. We do so by generating intermediate samples by linearly interpolating between pure noise x<sub>0</sub> and clean data x<sub>1</sub> to get x<sub>t</sub>, then we will compute the true flow that is the derivative of this interpolation with respect to time. The UNet is trained to approximate this flow field in order for us to iteratively update a noisy image along the flow towards the clean data distribution.</p>
           </div>
         </section>
 
         <section className="section block">
           <div className='section-intro'>
-            <h2>2.1: Adding Time Conditioning to UNet</h2>
+            <h2 id="B2.1">2.1: Adding Time Conditioning to UNet</h2>
             <p>With almost the same model architecture, we will now inject a scalar t through 2 FCB blocks into the UNet.</p>
            <img src="/cs180proj5/b/2.1_unconditional.png" alt="" className="bigimg" />
             <img src="/cs180proj5/b/2.1fcb.png" alt="" className="bigimg" />
@@ -1178,7 +1176,7 @@ const CS180Proj5 = () => {
 
          <section className="section block">
           <div className='section-intro'>
-            <h2>2.2: Training the UNet</h2>
+            <h2 id="B2.2">2.2: Training the UNet</h2>
             <p>We want the UNet to predict the flow that moves a noisy image towards a clean image. At each step, the UNet samples a clean image x<sub>1</sub>, a noisy image x<sub>0</sub>, and an interpolated image x<sub>t</sub>. We then update the model by minimizing the L2 loss between the true flow and the model's predicted flow.</p>
             <p>We use the following algorithm:</p>
             <img src="/cs180proj5/b/2.2algo.png" alt="" className="mediumimg" />
@@ -1208,7 +1206,7 @@ const CS180Proj5 = () => {
 
         <section className="section block">
           <div className='section-intro'>
-            <h2>2.3: Sampling from the UNet</h2>
+            <h2 id="B2.3">2.3: Sampling from the UNet</h2>
             <p>We use the following algorithm to do sampling:</p>
             <img src="/cs180proj5/b/2.3_algo.png" alt="" className="mediumimg" />
             <h4>Epoch 1</h4>
@@ -1223,14 +1221,14 @@ const CS180Proj5 = () => {
 
          <section className="section block">
           <div className='section-intro'>
-            <h2>2.4: Adding Class-Conditioning to UNet</h2>
+            <h2 id="B2.4">2.4: Adding Class-Conditioning to UNet</h2>
            <p>We want to have more class-controlled generation, so the UNet will need to be additionally conditioned on a one-hot class vector for digits 0-9 on top of the time embedding. This is doen by adding 2 extra FCBlocks into the UNet's intermediate features in a way similar to how time conditioning is added. To ensure the model still works without class conditioning and allow for classifier-free guidance, the class vector is randomly dropped by setting it to zero for 10% of the time during training.</p>
           </div>
         </section>
 
          <section className="section block">
           <div className='section-intro'>
-            <h2>2.5: Training the UNet</h2>
+            <h2 id="B2.5">2.5: Training the UNet</h2>
             <p>We use the following algorithm for training (similar to before but with slight modifications):</p>
             <img src="/cs180proj5/b/2.5_algo.png" alt="" className="mediumimg" />
            <h4>Training Loss Curve</h4>
@@ -1244,7 +1242,7 @@ const CS180Proj5 = () => {
 
         <section className="section block">
           <div className='section-intro'>
-            <h2>2.6: Sampling from the UNet</h2>
+            <h2 id="B2.6">2.6: Sampling from the UNet</h2>
             <h3>Parameters</h3>
             <ul>
               <li>γ = 5.0</li>

@@ -7,18 +7,19 @@ const CS180Proj4 = () => {
   // --- Scroll spy setup ---
   const sectionDefs = useMemo(() => ([
     { id: "0",    label: <b>Part 0</b>},
-    { id: "0.1",    label: "Part 0.1"},
-    { id: "0.2",    label: "Part 0.2"},
-    { id: "0.3",    label: "Part 0.3"},
-     { id: "0.4",    label: "Part 0.4"},
+    { id: "0.1",    label: "Calibrating Camera"},
+    { id: "0.2",    label: "Capturing a 3D Object Scan"},
+    { id: "0.3",    label: "Estimating Camera Pose"},
+     { id: "0.4",    label: "Undistorting images and creating a dataset"},
     { id: "1", label: <b>Part 1</b>},
+    { id: "1", label: "Fit a Neural Field to a 2D Image"},
     { id: "2",    label: <b>Part 2</b>},
-    { id: "2.1",    label: "Part 2.1" },
-    { id: "2.2",     label: "Part 2.2"},
-    { id: "2.3",  label: "Part 2.3"},
-    { id: "2.4",  label: "Part 2.4"},
-    { id: "2.5",     label: "Part 2.5" },
-    { id: "2.6",     label: "Part 2.6" },
+    { id: "2.1",    label: "Fit a NeRF from Multi-view Images" },
+    { id: "2.2",     label: "Sampling"},
+    { id: "2.3",  label: "Putting the Dataloading All Together"},
+    { id: "2.4",  label: "Neural Radiance Field"},
+    { id: "2.5",     label: "Volume Rendering" },
+    { id: "2.6",     label: "Training with my data" },
     
   ]), []);
 
@@ -111,9 +112,9 @@ const CS180Proj4 = () => {
 
         <section className="section block">
           <div className='section-intro'>
-            <h2 id="0">Part 0: Calibrating Your Camera and Capturing a 3D Scan</h2>
+            <h2 id="0">Part 0: Calibrating Camera and Capturing a 3D Scan</h2>
             <div className='subsection'>
-              <h3 id="0.1">Part 0.1: Calibrating Your Camera</h3>
+              <h3 id="0.1">Part 0.1: Calibrating Camera</h3>
               <p>In this section, a dataset will be created by first calibrating the phone camera and taking 30-50 images of the Aruco tags at a fixed zoom but varied viewing angles. This is achieved by detecting the Aruco tag corners using OpenCV and associating them with their respective 3D corner coordinates in the world to compute intrinsics and distortion of the phone camera using <code>cv2.calibrateCamera()</code>.</p>
               <img src="/cs180proj4/aruco.jpg" alt="" />
             </div>
@@ -368,11 +369,19 @@ const CS180Proj4 = () => {
               </figure>
             </div>
             <h4>Final gif</h4>
-            <img src="/cs180proj4/lego_spherical.gif" />
+            {/* <img src="/cs180proj4/lego_spherical.gif" alt="" /> */}
+            <video
+              src="/cs180proj4/lego.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{ width: "30%", borderRadius: 12 }}/>
+
           </div>
 
           <div id="2.6" className="subsection">
-            <h3>2.6: Training with your own data</h3>
+            <h3>2.6: Training with my data</h3>
             <p>I first use a similar model (with the same model architecture, but slightly different near and far values) as the one in 2.5 to train on the lafufu dataset, which is known for producing good results. This gives me a sense about any subtle bugs that may still exist in my implementation. After achieving a good lafufu result, then I work on my own dataset and adjust the dataset if no amount of training can give me a good result. To calculate a resonable good and far values, I compute the average vector norm of all the translation vectors in the extrinsics matrix c2ws. The average vector norm should lie between the good and far values I choose for my dataset. Then I will visualize the sample points after choosing the near and far values using viser to make sure that no sample points lie behind the images and no sample points lie too far away from the image.</p>
             <h4>Hyperparameters (Lafufu)</h4>
             <ul>
@@ -423,7 +432,14 @@ const CS180Proj4 = () => {
               </figure>
             </div>
             <h4>Final gif</h4>
-            <img src="/cs180proj4/lafufu_spherical.gif" />
+            <img src="/cs180proj4/lafufu_spherical.gif" /> 
+            {/* <video
+              src="/cs180proj4/lafufu.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{ width: "30%", borderRadius: 12 }}/> */}
 
             <h4>Hyperparameters (Bird)</h4>
             <ul>

@@ -440,6 +440,16 @@ figcaption {
   }
 }
 
+.toc {
+  overflow-y: auto;        /* still scrollable */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE / Edge */
+}
+
+.toc::-webkit-scrollbar {
+  display: none;          /* Chrome / Safari */
+}
+
 
 
 

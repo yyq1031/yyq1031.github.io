@@ -18,7 +18,7 @@ const INFO = {
 	homepage: {
 		title: "",
 		description:
-			"I am a third-year undergrad studying Electrical Engineering and Computer Science at UC Berkeley. I'm interested in AI/ML, Computer Vision, Robotics, and Computer Security.",
+			"I am a third-year undergrad studying Electrical Engineering and Computer Science at UC Berkeley. I'm interested in AI/ML, Systems and Computer Security.",
 	},
 
 	about: {
@@ -28,7 +28,7 @@ const INFO = {
 	},
 
 	research: {
-		title: "I'm passionate about AI/ML, Computer Vision, Robotics, and Computer Security.",
+		title: "I'm passionate about AI/ML, Systems, and Computer Security.",
 		description:
 			"",
 	},
@@ -122,16 +122,16 @@ const INFO = {
 			link: "https://github.com/yyq1031/Data100/tree/main/spam%26ham",
 		},
 
-		{
-			title: "Housing Prices Prediction",
-			type: "course",
-			highlight: "false",
-			description:
-				"Built a scikit-learn model on Cook County property data to predict housing prices using LASSO and Ridge regression.",
-			logo: "cookcounty.png",
-			linkText: "View Project",
-			link: "https://github.com/yyq1031/Data100/tree/main/housing",
-		},
+		// {
+		// 	title: "Housing Prices Prediction",
+		// 	type: "course",
+		// 	highlight: "false",
+		// 	description:
+		// 		"Built a scikit-learn model on Cook County property data to predict housing prices using LASSO and Ridge regression.",
+		// 	logo: "cookcounty.png",
+		// 	linkText: "View Project",
+		// 	link: "https://github.com/yyq1031/Data100/tree/main/housing",
+		// },
 
 		{
 			title: "Snek",
